@@ -25,6 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
+    env:
+      ISSUE_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.issue_number || github.event.issue.number }}
+
     steps:
       - name: 读取仓库文件
         uses: actions/checkout@v6
@@ -33,7 +36,6 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          ISSUE_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.issue_number || github.event.issue.number }}
 
         run: |
           python3 - <<'PY'
@@ -197,7 +199,6 @@ jobs:
         with:
           add-paths: tutorials.json
           branch: auto/tutorial-issue-${{ env.ISSUE_NUMBER }}
-          branch-suffix: short-commit-hash
           delete-branch: true
           commit-message: "Add tutorial candidate"
           title: "待审核：Issue #${{ env.ISSUE_NUMBER }} 学习资料"
