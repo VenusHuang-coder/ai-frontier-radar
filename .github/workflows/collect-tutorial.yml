@@ -1,0 +1,215 @@
+
+name: AI Tutorial Collector
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "要处理的 Issue 编号，例如 1"
+        required: true
+        type: number
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  collect:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.issue.user.login == github.repository_owner
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 读取仓库文件
+        uses: actions/checkout@v6
+
+      - name: 从 Issue 生成待审核教程
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.issue_number || github.event.issue.number }}
+
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          from urllib.parse import urlsplit, parse_qs
+          from urllib.request import Request, urlopen
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          number = os.environ["ISSUE_NUMBER"]
+
+          api = f"https://api.github.com/repos/{repo}/issues/{number}"
+          request = Request(api, headers={
+              "Authorization": "Bearer " + os.environ["GH_TOKEN"],
+              "Accept": "application/vnd.github+json",
+              "User-Agent": "AI-Frontier-Radar"
+          })
+
+          with urlopen(request, timeout=20) as response:
+              issue = json.load(response)
+
+          owner = repo.split("/")[0]
+          author = issue["user"]["login"]
+
+          if author.lower() != owner.lower():
+              print("跳过：只处理仓库所有者提交的资料")
+              raise SystemExit(0)
+
+          if "pull_request" in issue:
+              print("跳过：这不是普通 Issue")
+              raise SystemExit(0)
+
+          body = issue.get("body") or ""
+
+          def get_field(name):
+              pattern = (
+                  r"^### [ \t]*" + re.escape(name) +
+                  r"[ \t]*\r?\n(.*?)(?=^### [ \t]|\Z)"
+              )
+              match = re.search(
+                  pattern, body, flags=re.M | re.S
+              )
+              return match.group(1).strip() if match else ""
+
+          content_type = get_field("资料类型")
+          if content_type != "AI 入门教程":
+              print("跳过：该类型暂不进入教程库")
+              raise SystemExit(0)
+
+          raw_link = get_field("资料链接")
+          match = re.search(r"https?://[^\s<>()]+", raw_link)
+
+          if not match:
+              print("未找到有效的资料链接")
+              raise SystemExit(1)
+
+          url = match.group(0).rstrip(".,")
+          parts = urlsplit(url)
+          host = (parts.hostname or "").lower()
+
+          def is_domain(domain):
+              return host == domain or host.endswith("." + domain)
+
+          if parts.scheme != "https":
+              raise SystemExit("只接受 HTTPS 链接")
+
+          if is_domain("bilibili.com") or host == "b23.tv":
+              platform = "bilibili"
+          elif is_domain("youtube.com") or host == "youtu.be":
+              platform = "youtube"
+          elif is_domain("xiaohongshu.com") or host == "xhslink.com":
+              platform = "xiaohongshu"
+          else:
+              raise SystemExit("暂不支持此平台的链接")
+
+          def unique_key(link):
+              p = urlsplit(link)
+              h = (p.hostname or "").lower()
+              path = p.path.rstrip("/")
+
+              if h.endswith("bilibili.com"):
+                  m = re.search(r"/video/(BV\w+)", path, re.I)
+                  if m:
+                      return "bilibili:" + m.group(1).lower()
+
+              if h.endswith("youtube.com"):
+                  video_id = parse_qs(p.query).get("v", [""])[0]
+                  if not video_id and (
+                      path.startswith("/shorts/") or
+                      path.startswith("/live/")
+                  ):
+                      video_id = path.split("/")[2]
+                  if video_id:
+                      return "youtube:" + video_id
+
+              if h == "youtu.be":
+                  return "youtube:" + path.lstrip("/")
+
+              return h + path + (
+                  "?" + p.query if p.query else ""
+              )
+
+          file = Path("tutorials.json")
+          data = json.loads(file.read_text(encoding="utf-8"))
+          items = data["items"]
+
+          for item in items:
+              if unique_key(item.get("url", "")) == unique_key(url):
+                  print("检测到重复教程，已跳过：", url)
+                  raise SystemExit(0)
+
+          difficulty_map = {
+              "零基础": "beginner",
+              "初级实操": "intermediate",
+              "进阶项目": "advanced"
+          }
+
+          issue_title = issue["title"].strip()
+          title = re.sub(
+              r"^\[收藏\]\s*", "", issue_title
+          ).strip()[:150]
+
+          note = get_field("收藏原因或学习目标")
+          if note in ("_No response_", "None"):
+              note = ""
+
+          item = {
+              "id": f"github-issue-{number}",
+              "platform": platform,
+              "title": title or "待核验教程",
+              "creator": "待核验",
+              "url": url,
+              "difficulty": difficulty_map.get(
+                  get_field("学习难度"), "beginner"
+              ),
+              "topic": "待分类",
+              "language": "unknown",
+              "summary": "来自收藏表单，教程内容尚待核验。",
+              "learning_outcomes": [],
+              "recommended_sections": "待核验",
+              "learning_value": note[:300],
+              "verified": False,
+              "status": "pending",
+              "source_issue": int(number)
+          }
+
+          items.append(item)
+          file.write_text(
+              json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8"
+          )
+
+          print("已生成待审核教程：", item["title"])
+          print("来源：", item["url"])
+          PY
+
+      - name: 创建待审核 Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          add-paths: tutorials.json
+          branch: auto/tutorial-issue-${{ env.ISSUE_NUMBER }}
+          branch-suffix: short-commit-hash
+          delete-branch: true
+          commit-message: "Add tutorial candidate"
+          title: "待审核：Issue #${{ env.ISSUE_NUMBER }} 学习资料"
+          body: |
+            来源：Issue #${{ env.ISSUE_NUMBER }}
+
+            这是一条自动生成的教程候选记录。
+
+            审核时请检查：
+            - 标题、作者、链接是否正确
+            - 内容是否适合 AI 初学者
+            - 中文介绍和学习收获是否准确
+            - 确认后将 verified 改为 true
+
+            请审核后再合并，不要直接发布未经核实的内容。
