@@ -1,0 +1,81 @@
+
+{
+  "items": [
+    {
+      "id": "bilibili-n8n-001",
+      "platform": "bilibili",
+      "title": "从零学习 n8n：搭建你的第一个自动化工作流",
+      "creator": "木子不写代码",
+      "url": "https://www.bilibili.com/video/BV1SxEPzdECk/",
+      "difficulty": "beginner",
+      "topic": "Workflow / AI Agent",
+      "language": "zh",
+      "summary": "中文实操课程，从认识 n8n、触发节点开始，逐步学习工作流搭建、HTTP 请求和数据处理。",
+      "learning_outcomes": [
+        "理解自动化工作流和触发器是什么",
+        "认识 API、HTTP 请求和数据结构",
+        "了解如何搭建并测试一个自动化工作流"
+      ],
+      "recommended_sections": "优先第1、3、4、5节",
+      "learning_value": "与你的 AI Frontier Radar 自动采集和定时更新项目直接相关。",
+      "verified": true
+    },
+    {
+      "id": "bilibili-dify-001",
+      "platform": "bilibili",
+      "title": "Dify 零基础入门：创建 AI 应用、工作流与知识库",
+      "creator": "科技猎手",
+      "url": "https://www.bilibili.com/video/BV1iSoHYMECo/",
+      "difficulty": "beginner",
+      "topic": "Dify / RAG",
+      "language": "zh",
+      "summary": "从应用创建到工作流和知识库，了解如何借助可视化平台实现简单 AI 应用。",
+      "learning_outcomes": [
+        "认识 Dify 和可视化 AI 应用开发",
+        "理解工作流及知识库的基本作用",
+        "了解 AI 应用从创建到发布的主要步骤"
+      ],
+      "recommended_sections": "优先应用创建、工作流、知识库章节",
+      "learning_value": "适合制作你的第一个低代码 AI 知识库项目。",
+      "verified": true
+    },
+    {
+      "id": "bilibili-dify-002",
+      "platform": "bilibili",
+      "title": "2026 Dify 实战：聊天助手、知识库与工作流",
+      "creator": "码士集团-马小雪",
+      "url": "https://www.bilibili.com/video/BV1Tp8F6pEKt/",
+      "difficulty": "beginner",
+      "topic": "Dify / AI 产品",
+      "language": "zh",
+      "summary": "通过聊天助手、文本生成、工作流、知识库和数据可视化案例，学习 AI 应用的基本搭建方式。",
+      "learning_outcomes": [
+        "理解 AI 聊天助手的基础配置",
+        "了解工作流与 Chatflow 的区别",
+        "学习知识库和数据可视化的应用场景"
+      ],
+      "recommended_sections": "优先第1至第6节",
+      "learning_value": "适合积累 AI 产品运营和 AI 应用设计的实操经验。",
+      "verified": true
+    },
+    {
+      "id": "youtube-n8n-001",
+      "platform": "youtube",
+      "title": "n8n 新手教程：零代码搭建自动化工作流",
+      "creator": "Kevin Stratvert",
+      "url": "https://www.youtube.com/watch?v=Bj5VHo55QLw",
+      "difficulty": "beginner",
+      "topic": "n8n / Automation",
+      "language": "en",
+      "summary": "英文视频，演示如何创建自动化流程，将 Gmail 邮件附件自动保存到 Dropbox，包括触发器、账户连接、测试和激活。",
+      "learning_outcomes": [
+        "认识 n8n 工作流的结构",
+        "理解不同应用如何通过工作流连接",
+        "了解如何测试和启用自动化任务"
+      ],
+      "recommended_sections": "优先00:20工具介绍、10:05工作流示例、14:16工作流搭建",
+      "learning_value": "适合参考完整自动化案例；部分步骤涉及第三方托管服务，不必购买。",
+      "verified": true
+    }
+  ]
+}
