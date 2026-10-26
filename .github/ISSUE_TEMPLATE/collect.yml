@@ -1,0 +1,46 @@
+
+name: 收藏 AI 学习资料
+description: 收藏 B站、YouTube、小红书视频及优质图文
+title: "[收藏] "
+body:
+  - type: input
+    id: resource_url
+    attributes:
+      label: 资料链接
+      description: 粘贴你想收藏的视频或文章链接
+      placeholder: https://example.com
+    validations:
+      required: true
+
+  - type: dropdown
+    id: resource_type
+    attributes:
+      label: 资料类型
+      options:
+        - AI 入门教程
+        - AI 产品案例
+        - AI 技术文章
+        - 关注的 AI 博主
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: 学习难度
+      options:
+        - 不确定
+        - 零基础
+        - 初级实操
+        - 进阶项目
+    validations:
+      required: true
+
+  - type: textarea
+    id: personal_note
+    attributes:
+      label: 收藏原因或学习目标
+      description: 这份资料吸引你的地方是什么？
+      placeholder: 例如：我想学习如何使用 Dify 创建知识库
+    validations:
+      required: false
