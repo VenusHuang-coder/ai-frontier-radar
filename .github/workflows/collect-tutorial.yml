@@ -75,7 +75,7 @@ jobs:
           def get_field(name):
               pattern = (
                   r"^### [ \t]*" + re.escape(name) +
-                  r"[ \t]*\r?\n(.*?)(?=^### [ \t]|\Z)"
+                  r"[ \t]*\r?\n(.*?)(?=^###[ \t]+|\Z)"
               )
               match = re.search(
                   pattern, body, flags=re.M | re.S
@@ -83,6 +83,7 @@ jobs:
               return match.group(1).strip() if match else ""
 
           content_type = get_field("资料类型")
+          print("识别到的资料类型：", repr(content_type))
           if content_type != "AI 入门教程":
               print("跳过：该类型暂不进入教程库")
               raise SystemExit(0)
