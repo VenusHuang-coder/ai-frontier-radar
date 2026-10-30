@@ -1,8 +1,12 @@
 
+
 name: Sync Feishu Tutorials
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "30 8 * * *"
+      timezone: "Asia/Shanghai"
 
 permissions:
   contents: write
