@@ -77,6 +77,21 @@
       "verified": true
     },
     {
+      "id": "feishu-reczz28TTGzdgUa5",
+      "platform": "bilibili",
+      "title": "AI知识库怎么用？Obsidian整理得越好,越不想打开?",
+      "creator": "Kiven大汉堡",
+      "url": "https://www.bilibili.com/video/BV1pP8g6LE1H/",
+      "difficulty": "intermediate",
+      "topic": "Obsidian与AI",
+      "language": "zh",
+      "summary": "视频探讨了如何有效使用AI知识库，特别是通过Obsidian软件。作者指出，尽管整理得越好，越不想打开知识库，但可以通过围绕任务组织资料、自己定规则让AI照着做来解决这一问题。视频强调了AI应作为辅助工具，帮助用户处理工作，而非管理知识库，用户仍需自行判断和使用信息。",
+      "recommended_sections": "",
+      "learning_value": "学习后可以掌握如何有效利用AI知识库和Obsidian软件，提升个人生产力。",
+      "verified": true,
+      "source": "feishu"
+    },
+    {
       "id": "feishu-reczz28TTHnPlv3h",
       "platform": "bilibili",
       "title": "如何把Obsidian Web Clipper价值最大化？",
