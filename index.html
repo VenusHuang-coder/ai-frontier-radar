@@ -1,585 +1,659 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Frontier Radar｜AI 前沿情报站</title>
+  <meta name="theme-color" content="#fafaf9">
+  <meta name="description" content="AI Frontier Radar：发现优质 AI 资讯和教程，建立自己的轻量 AI 学习工作台。">
+  <title>AI Frontier Radar · AI 学习工作台</title>
   <style>
     :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #172033;
-      --muted: #64748b;
-      --line: #e4e9f1;
-      --accent: #4f46e5;
+      color-scheme: light;
+      --bg: #f6f8f7;
+      --panel: #fff;
+      --ink: #192b2d;
+      --text: #314447;
+      --muted: #728183;
+      --line: #e4eae6;
+      --green: #247363;
+      --green-strong: #155a4e;
+      --green-light: #eaf6ef;
+      --night: #112a2b;
+      --shadow: 0 10px 35px rgba(31, 57, 47, .04);
+      --radius: 17px;
     }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont,
-        "PingFang SC", "Microsoft YaHei", sans-serif;
-      line-height: 1.65;
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink); font: 15px/1.65 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #76b9a3; outline-offset: 2px; }
+    [hidden] { display: none !important; }
+    .icon { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; flex: none; }
+    .icon.lg { width: 23px; height: 23px; }
+    .app { min-height: 100vh; }
+    .sidebar { width: 246px; background: var(--night); color: #eaf4ef; position: fixed; left: 0; top: 0; bottom: 0; display: flex; flex-direction: column; padding: 29px 16px 21px; z-index: 40; }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 12px 30px; }
+    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #d5efe2; color: #1b6956; }
+    .brand-name { font-size: 15px; font-weight: 800; line-height: 1.22; letter-spacing: -.2px; }
+    .brand-sub { color: #a1bcb5; font-size: 11px; margin-top: 3px; }
+    .side-caption { padding: 4px 13px 10px; color: #78978f; font-size: 11px; letter-spacing: 1.7px; }
+    .side-nav { display: flex; flex-direction: column; gap: 5px; }
+    .nav-link { width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; border: 0; color: #b8ceca; background: transparent; padding: 12px 14px; border-radius: 12px; font-weight: 650; font-size: 14px; }
+    .nav-link:hover { color: #fff; background: #1a3a39; }
+    .nav-link.active { color: #f4fff8; background: #28574e; }
+    .nav-link.active .icon { color: #b7ead1; }
+    .sidebar-foot { margin-top: auto; padding: 15px 10px 0; border-top: 1px solid #294544; }
+    .sidebar-foot p { margin: 0 0 11px; font-size: 12px; color: #a8c2b9; }
+    .side-external { display: flex; gap: 8px; align-items: center; font-size: 12px; color: #e3efe7; padding: 8px 2px; }
+    .shell { margin-left: 246px; min-height: 100vh; }
+    .topbar { height: 79px; background: rgba(255, 255, 255, .86); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 clamp(20px, 3.5vw, 54px); }
+    .topbar-title { font-size: 14px; font-weight: 760; }
+    .topbar-subtitle { font-size: 12px; color: var(--muted); }
+    .topbar-right { display: flex; align-items: center; gap: 15px; }
+    .live-dot { width: 7px; height: 7px; background: #299274; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .sync-chip { border: 1px solid #dfebe5; border-radius: 999px; padding: 7px 12px; font-size: 12px; background: #f6fbf8; color: #3f7162; white-space: nowrap; }
+    .top-date { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .content { max-width: 1450px; margin: 0 auto; padding: 32px clamp(20px, 3.5vw, 54px) 65px; }
+    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 0 0 22px; }
+    .kicker { color: var(--green); font-size: 11px; font-weight: 800; letter-spacing: 2.1px; text-transform: uppercase; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 { font-size: clamp(26px, 2.7vw, 37px); letter-spacing: -.8px; line-height: 1.35; margin-bottom: 8px; }
+    h2 { font-size: 19px; letter-spacing: -.3px; line-height: 1.4; margin-bottom: 0; }
+    h3 { font-size: 16px; line-height: 1.48; margin-bottom: 0; }
+    .subtle { color: var(--muted); }
+    .lead { font-size: 14px; color: var(--muted); margin-bottom: 0; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.53fr) minmax(270px, 1fr); gap: 18px; }
+    .hero { border-radius: 22px; color: #f2fff5; background: radial-gradient(circle at 83% 13%, rgba(127,206,164,.16), transparent 42%), linear-gradient(123deg,#173e39,#12312f 64%,#1c5043); padding: clamp(24px, 3vw, 35px); min-height: 284px; position: relative; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; right: -45px; bottom: -105px; width: 255px; height: 255px; border: 1px solid #78c5a144; border-radius: 50%; box-shadow: 0 0 0 40px #a0dbb60b, 0 0 0 83px #a0dbb608; pointer-events: none; }
+    .hero .kicker { color: #9ed9bc; }
+    .hero h1 { margin-top: 18px; max-width: 590px; }
+    .hero p { max-width: 490px; color: #c4ded3; font-size: 14px; margin-bottom: 22px; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+    .btn { display: inline-flex; justify-content: center; align-items: center; gap: 7px; border-radius: 10px; border: 1px solid var(--line); padding: 10px 15px; font-size: 13px; font-weight: 730; color: var(--ink); background: white; min-height: 40px; }
+    .btn:hover { border-color: #accfc0; background: #f6fbf8; }
+    .btn.primary { background: var(--green); border-color: var(--green); color: white; }
+    .btn.primary:hover { background: var(--green-strong); }
+    .btn.hero-primary { background: #e1f4e8; color: #134d42; border-color: transparent; }
+    .btn.hero-secondary { background: #ffffff15; color: #f1f9f3; border-color: #ffffff45; }
+    .btn.ghost { border-color: transparent; background: transparent; color: var(--green); padding: 7px 0; }
+    .btn.small { min-height: 34px; padding: 7px 11px; font-size: 12px; }
+    .quick-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: var(--shadow); }
+    .quick-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .quick-action { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 13px; padding: 14px; background: #fafcfb; text-align: left; min-height: 101px; }
+    .quick-action:hover { background: #eef8f1; border-color: #b9d8c8; }
+    .quick-action .icon { color: var(--green); }
+    .quick-action span { font-weight: 730; font-size: 13px; }
+    .quick-help { font-size: 12px; color: var(--muted); margin: 14px 0 0; }
+    .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 18px 0 28px; }
+    .stat { padding: 20px 22px; background: #fff; border: 1px solid var(--line); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .stat .number { display: block; font-size: 29px; font-weight: 820; line-height: 1.15; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+    .stat .caption { font-size: 12px; color: var(--muted); margin-top: 5px; }
+    .stat-icon { width: 39px; height: 39px; display: grid; place-items: center; background: #eef7f1; border-radius: 12px; color: var(--green); }
+    .section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 15px; }
+    .section-heading p { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+    .section-link { background: transparent; color: var(--green); border: 0; padding: 5px 0; font-size: 13px; font-weight: 720; white-space: nowrap; }
+    .section-link:hover { text-decoration: underline; }
+    .two-col { display: grid; grid-template-columns: minmax(0, 1.13fr) minmax(300px, .87fr); gap: 18px; align-items: start; }
+    .focus-card { border: 1px solid var(--line); background: #fff; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+    .tag { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; font-size: 11px; font-weight: 690; border-radius: 7px; color: var(--green); background: var(--green-light); width: fit-content; }
+    .tag.muted { color: #657478; background: #edf1ef; }
+    .tag.amber { background: #fff4df; color: #92641c; }
+    .focus-card h3 { margin: 13px 0 9px; font-size: 20px; }
+    .focus-card p { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .focus-meta { font-size: 12px; color: #5e7572; margin-bottom: 18px; }
+    .focus-actions { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+    .feed-list { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .feed-row { padding: 16px 20px; border-bottom: 1px solid var(--line); display: grid; gap: 5px; }
+    .feed-row:last-child { border-bottom: 0; }
+    .feed-row a { display: block; font-weight: 730; font-size: 13px; line-height: 1.5; }
+    .feed-row a:hover { color: var(--green); }
+    .feed-row .subtle { font-size: 11px; }
+    .knowledge-strip { margin-top: 24px; background: #edf5ef; border: 1px solid #d5e8db; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 21px 24px; }
+    .knowledge-strip p { color: #5c7569; font-size: 13px; margin: 5px 0 0; }
+    .panel-heading { margin-bottom: 23px; }
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+    .search-wrap { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 11px; padding: 0 13px; min-width: 230px; flex: 1 1 230px; }
+    .search-wrap .icon { color: #77908a; }
+    .search-wrap input { padding: 12px 0; border: 0; outline: 0; min-width: 0; width: 100%; color: var(--ink); background: transparent; font-size: 13px; }
+    .search-wrap:focus-within { outline: 2px solid #bddccc; }
+    select { min-height: 46px; border: 1px solid var(--line); background: #fff; border-radius: 11px; color: #506366; padding: 0 12px; font-size: 13px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+    .chip { border: 1px solid var(--line); background: #fff; color: #596b6d; padding: 7px 13px; border-radius: 100px; font-size: 12px; }
+    .chip.active { background: #e3f2e9; border-color: #bbdecb; color: var(--green-strong); font-weight: 760; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .resource-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); display: flex; flex-direction: column; gap: 11px; padding: 21px; min-width: 0; box-shadow: var(--shadow); }
+    .resource-card h3 { font-size: 17px; line-height: 1.48; overflow-wrap: anywhere; }
+    .resource-card p { color: #617274; margin: 0; font-size: 13px; }
+    .resource-card .reason { padding-top: 10px; border-top: 1px solid #eef0ed; font-size: 12px; }
+    .resource-card .reason b { color: var(--ink); }
+    .meta { color: var(--muted); font-size: 12px; }
+    .card-actions { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; margin-top: auto; padding-top: 5px; }
+    .card-actions .grow { flex: 1; }
+    .text-link { color: var(--green); font-size: 13px; font-weight: 700; }
+    .text-link:hover { text-decoration: underline; }
+    .icon-button { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); color: #708280; background: white; }
+    .icon-button:hover, .icon-button.active { color: var(--green); background: #eff8f1; border-color: #b3d7c6; }
+    .empty { padding: 35px 22px; background: white; border: 1px dashed #c9d7d0; border-radius: 15px; color: var(--muted); text-align: center; grid-column: 1 / -1; }
+    .empty h3 { color: var(--ink); margin-bottom: 5px; }
+    .empty p { font-size: 13px; margin-bottom: 12px; }
+    .saved-section { margin-top: 24px; }
+    .privacy { font-size: 12px; color: #658079; background: #eaf4ee; border: 1px solid #d3e5d8; padding: 11px 14px; border-radius: 10px; margin-bottom: 20px; }
+    footer { margin-top: 42px; color: #90a09c; text-align: center; font-size: 12px; }
+    dialog { border: 1px solid var(--line); border-radius: 18px; padding: 0; width: min(570px, calc(100% - 24px)); max-height: min(83vh, 800px); overflow: auto; color: var(--ink); box-shadow: 0 20px 60px #13241f23; }
+    dialog::backdrop { background: #1423218a; }
+    .dialog-body { padding: 26px; }
+    .dialog-heading { display: flex; gap: 20px; justify-content: space-between; align-items: start; margin-bottom: 16px; }
+    .dialog-heading h2 { margin-bottom: 5px; }
+    .dialog-heading p { color: var(--muted); font-size: 12px; margin: 0; }
+    .dialog-close { border: 0; background: #edf2ee; border-radius: 10px; width: 36px; height: 36px; display: grid; place-items: center; }
+    .dialog-section { margin-top: 15px; border-top: 1px solid var(--line); padding-top: 13px; }
+    .dialog-section h3 { font-size: 13px; margin-bottom: 5px; }
+    .dialog-section p { font-size: 13px; color: #586d6b; margin: 0; white-space: pre-wrap; }
+    .form-label { font-size: 12px; font-weight: 760; margin-bottom: 8px; display: block; }
+    .form-input { width: 100%; border: 1px solid var(--line); padding: 11px 13px; border-radius: 10px; outline-color: #88bba4; }
+    .form-help { margin: 9px 0 16px; font-size: 12px; color: var(--muted); }
+    .form-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    #toast { position: fixed; right: 22px; bottom: 24px; z-index: 100; border-radius: 11px; padding: 11px 17px; background: #153f35; color: #fff; box-shadow: 0 12px 32px #183e313d; font-size: 13px; }
+    @media (max-width: 1170px) { .hero-grid { grid-template-columns: 1fr; } .quick-panel { padding: 20px; } .quick-grid { grid-template-columns: repeat(4,1fr); } .quick-action { min-height: 97px; } }
+    @media (max-width: 900px) {
+      .sidebar { position: relative; width: 100%; height: auto; padding: 14px 20px 13px; }
+      .brand { padding: 0 0 14px; } .brand-mark { width: 32px; height: 32px; }
+      .brand-sub, .side-caption, .sidebar-foot { display: none; }
+      .side-nav { flex-direction: row; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+      .side-nav::-webkit-scrollbar { display: none; }
+      .nav-link { width: auto; flex: none; padding: 9px 12px; gap: 7px; font-size: 12px; }
+      .nav-link .icon { width: 15px; height: 15px; }
+      .shell { margin: 0; }
+      .topbar { height: 62px; }
     }
-    .container {
-      max-width: 1100px;
-      padding: 0 22px;
-      margin: auto;
+    @media (max-width: 680px) {
+      .top-date { display: none; } .topbar { padding: 0 18px; }
+      .content { padding: 24px 17px 45px; }
+      .hero-grid, .two-col, .cards { grid-template-columns: 1fr; }
+      .hero { min-height: 270px; }
+      .quick-grid { grid-template-columns: 1fr 1fr; }
+      .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .stat { padding: 15px 11px; } .stat .number { font-size: 23px; }
+      .stat-icon { display: none; }
+      .knowledge-strip { align-items: flex-start; flex-direction: column; }
+      .page-heading { align-items: flex-start; flex-direction: column; }
+      .resource-card { padding: 18px; }
+      .sync-chip { font-size: 11px; }
+      .side-nav { gap: 3px; }
+      .nav-link { flex: 1; justify-content: center; white-space: nowrap; padding: 9px 2px; font-size: 11px; }
+      .nav-link .icon { display: none; }
     }
-    header {
-      background: #111b32;
-      color: white;
-      padding: 42px 0;
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    /* V1.1 — monochrome workspace, inspired by a restrained editorial UI. */
+    :root {
+      --bg: #fafaf9; --panel: #ffffff; --ink: #171717; --text: #353535;
+      --muted: #777777; --line: #e9e9e7; --green: #171717;
+      --green-strong: #090909; --green-light: #f3f3f2; --night: #ffffff;
+      --shadow: none; --radius: 16px; --progress-track: #eeeeec;
     }
-    header h1 { margin: 0; font-size: 34px; }
-    header p { color: #cbd5e1; }
-    .tagline { font-size: 13px; letter-spacing: 2px; }
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
+    body { background: var(--bg); color: var(--ink); letter-spacing: -.06px; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline-color: #888; }
+    .sidebar { background: #fff; color: #1b1b1b; border-right: 1px solid var(--line); padding-top: 31px; }
+    .brand-mark { background: #191919; color: #fff; border-radius: 11px; }
+    .brand-name { font-weight: 760; letter-spacing: -.4px; }
+    .brand-sub { color: #898989; white-space: nowrap; font-size: 10px; letter-spacing: -.2px; }
+    .side-caption { color: #aaa; }
+    .nav-link { color: #646464; font-weight: 610; border-radius: 10px; }
+    .nav-link:hover { color: #151515; background: #f7f7f6; }
+    .nav-link.active { color: #151515; background: #f0f0ef; }
+    .nav-link.active .icon { color: #171717; }
+    .sidebar-foot { border-top-color: #eaeae8; }
+    .sidebar-foot p { color: #777; }
+    .side-external { color: #373737; }
+    .topbar { background: rgba(255,255,255,.94); }
+    .live-dot { background: #222; }
+    .sync-chip { color: #565656; background: #f8f8f7; border-color: #e8e8e6; }
+    .kicker { color: #8d8d8d; letter-spacing: 1.8px; }
+    h1 { letter-spacing: -1.25px; }
+    .hero { background: #191919; color: #fff; border: 1px solid #191919; border-radius: 20px; }
+    .hero::after { border-color: #ffffff23; box-shadow: 0 0 0 42px #ffffff09, 0 0 0 86px #ffffff06; }
+    .hero .kicker { color: #bcbcbc; }
+    .hero p { color: #c4c4c4; }
+    .btn { border-color: #e4e4e2; background: #fff; color: #1f1f1f; border-radius: 10px; font-weight: 680; }
+    .btn:hover { border-color: #bdbdbb; background: #f5f5f4; }
+    .btn.primary { color: #fff; background: #1a1a1a; border-color: #1a1a1a; }
+    .btn.primary:hover { background: #333; border-color: #333; }
+    .btn.hero-primary { color: #181818; background: #fff; border-color: #fff; }
+    .btn.hero-primary:hover { background: #eee; }
+    .btn.hero-secondary { color: #fff; background: #ffffff0e; border-color: #ffffff4d; }
+    .btn.hero-secondary:hover { background: #ffffff24; }
+    .btn.ghost { color: #1a1a1a; }
+    .quick-panel, .focus-card, .stat, .resource-card, .feed-list { box-shadow: none; }
+    .quick-action { background: #fafaf9; }
+    .quick-action:hover { background: #f0f0ef; border-color: #d4d4d1; }
+    .quick-action .icon { color: #222; }
+    .stat-icon { background: #f4f4f3; color: #292929; }
+    .section-link { color: #353535; }
+    .tag { color: #383838; background: #f2f2f1; border: 1px solid #ebebe9; }
+    .tag.muted { color: #777; background: #f7f7f6; }
+    .tag.amber { color: #202020; background: #e9e9e7; }
+    .focus-meta, .feed-row .subtle, .resource-card p { color: #777; }
+    .feed-row a:hover, .text-link, .icon-button:hover { color: #111; }
+    .knowledge-strip { background: #f3f3f2; border-color: #e7e7e5; }
+    .knowledge-strip p { color: #777; }
+    .search-wrap .icon { color: #999; }
+    .search-wrap:focus-within { outline-color: #bababa; }
+    select { color: #494949; }
+    .chip { color: #555; }
+    .chip.active { color: #fff; background: #1b1b1b; border-color: #1b1b1b; }
+    .resource-card .reason { border-top-color: #ededeb; }
+    .icon-button { color: #777; }
+    .icon-button:hover, .icon-button.active { background: #f0f0ef; border-color: #d1d1ce; }
+    .empty { border-color: #ddd; }
+    .privacy { color: #606060; background: #f4f4f3; border-color: #e9e9e7; }
+    footer { color: #999; }
+    dialog { box-shadow: 0 24px 75px #00000028; }
+    dialog::backdrop { background: #00000066; }
+    .dialog-close { background: #f2f2f1; }
+    .dialog-section p { color: #686868; }
+    .form-input { outline-color: #888; }
+    #toast { background: #222; box-shadow: 0 12px 28px #00000025; }
+    /* Progress overview: counted only from manually enrolled tutorials. */
+    .progress-dashboard { margin: 4px 0 29px; border-radius: 18px; background: #fff; border: 1px solid var(--line); padding: 25px 27px 27px; }
+    .progress-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 17px; }
+    .progress-head h2 { font-size: 19px; }
+    .progress-head p { margin: 5px 0 0; font-size: 12px; color: var(--muted); }
+    .progress-grid { display: grid; grid-template-columns: auto minmax(0,1fr); gap: clamp(20px, 3vw, 44px); align-items: center; }
+    .progress-ring { --pct: 0%; width: 148px; height: 148px; flex: none; border-radius: 50%; background: conic-gradient(#1b1b1b 0 var(--pct), #efefed var(--pct) 100%); display: grid; place-items: center; position: relative; }
+    .progress-ring::before { content: ''; width: calc(100% - 22px); height: calc(100% - 22px); background: #fff; border-radius: 50%; position: absolute; }
+    .progress-ring-center { position: relative; text-align: center; line-height: 1.15; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .progress-ring-center strong { font-size: 31px; letter-spacing: -1.4px; font-variant-numeric: tabular-nums; }
+    .progress-ring-center small { color: #8b8b8b; font-size: 11px; }
+    .progress-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-bottom: 17px; }
+    .progress-metric { min-width: 0; }
+    .progress-metric b { display: block; font-size: 23px; line-height: 1.2; letter-spacing: -.6px; font-variant-numeric: tabular-nums; }
+    .progress-metric small { display: block; font-size: 12px; color: #898989; margin-top: 4px; }
+    .progress-meter { height: 8px; border-radius: 20px; background: #f0f0ee; overflow: hidden; }
+    .progress-meter-fill { width: 0; height: 100%; background: #1c1c1c; transition: width .25s ease; border-radius: inherit; }
+    .progress-caption { display: flex; justify-content: space-between; gap: 12px; margin-top: 9px; color: #777; font-size: 12px; }
+    .progress-caption span:last-child { font-variant-numeric: tabular-nums; }
+    .progress-empty { margin: 10px 0 0; font-size: 12px; color: #999; }
+    .progress-summary-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.83fr); gap: 18px; }
+    .progress-items-panel, .progress-guide { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 23px; }
+    .progress-guide { background: #f6f6f5; }
+    .progress-guide h3 { margin: 0 0 9px; }
+    .progress-guide p { color: #777; font-size: 13px; line-height: 1.75; }
+    .progress-guide .btn { margin-top: 10px; }
+    .progress-items { display: flex; flex-direction: column; gap: 0; }
+    .progress-item { padding: 18px 0; border-bottom: 1px solid #ececeb; }
+    .progress-item:last-child { border-bottom: none; }
+    .progress-item-title { font-size: 14px; font-weight: 720; margin-bottom: 7px; line-height: 1.45; overflow-wrap: anywhere; }
+    .progress-item-meta { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 11px; color: #888; font-size: 12px; }
+    .progress-item .progress-meter { height: 6px; }
+    .progress-item-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 11px; align-items: center; }
+    .progress-item-actions .btn { padding: 7px 11px; min-height: 32px; }
+    .progress-range-wrap { margin: 12px 0 2px; display: flex; gap: 12px; align-items: center; }
+    .progress-range-wrap input[type=range] { width: 100%; min-width: 0; accent-color: #202020; cursor: pointer; }
+    .progress-range-label { white-space: nowrap; color: #777; font-size: 11px; min-width: 70px; }
+    .inline-progress { border-top: 1px solid #eeeeed; padding-top: 11px; margin-top: 3px; }
+    .inline-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: #777; margin-bottom: 7px; }
+    .inline-progress .progress-meter { height: 6px; }
+    .inline-progress .progress-range-wrap { margin: 8px 0 0; }
+    .progress-dashboard .section-link { white-space: nowrap; }
+    @media (max-width: 900px) {
+      .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+      .brand { padding-bottom: 13px; }
     }
-    .hero-number {
-      font-size: 36px;
-      font-weight: 700;
-      text-align: right;
-    }
-    .hero-number small {
-      display: block;
-      font-size: 12px;
-      font-weight: 400;
-      color: #cbd5e1;
-    }
-    .notice {
-      background: #fff7e6;
-      border: 1px solid #f3d6a0;
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-top: 22px;
-      font-size: 13px;
-    }
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: space-between;
-      margin: 25px 0;
-    }
-    .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-    button, input { font: inherit; }
-    .tab, .save {
-      cursor: pointer;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      padding: 9px 14px;
-      color: var(--text);
-    }
-    .tab.active {
-      background: var(--accent);
-      color: white;
-    }
-    input {
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      padding: 10px 12px;
-      min-width: 180px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 38px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .card h2 { font-size: 19px; margin: 0; line-height: 1.45; }
-    .card p { color: var(--muted); margin: 0; font-size: 14px; }
-    .meta {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .category {
-      color: var(--accent);
-      background: #eef2ff;
-      border-radius: 6px;
-      padding: 4px 9px;
-      font-size: 12px;
-      width: fit-content;
-    }
-    .card-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: auto;
-      padding-top: 12px;
-    }
-    .read {
-      color: var(--accent);
-      cursor: pointer;
-      font-weight: 600;
-      background: none;
-      border: none;
-      padding: 8px 0;
-    }
-    .save.saved { color: var(--accent); }
-    dialog {
-      border: none;
-      border-radius: 16px;
-      padding: 26px;
-      width: min(650px, calc(100% - 24px));
-      max-height: 85vh;
-      overflow: auto;
-      color: var(--text);
-    }
-    dialog::backdrop { background: #111827aa; }
-    .dialog-top {
-      display: flex;
-      justify-content: flex-end;
-    }
-    .close {
-      border: none;
-      background: #f1f5f9;
-      border-radius: 7px;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-    .detail-section { margin: 20px 0; }
-    .detail-section h3 { margin-bottom: 4px; font-size: 15px; }
-    .detail-section p { margin-top: 0; color: #475569; }
-    a { color: var(--accent); overflow-wrap: anywhere; }
-    footer {
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-      text-align: center;
-      padding: 25px;
-    }
-    @media(max-width: 700px) {
-      header h1 { font-size: 26px; }
-      .hero-number { font-size: 26px; }
-      .grid { grid-template-columns: 1fr; }
-      .toolbar { flex-direction: column; }
-      input { width: 100%; }
+    @media (max-width: 680px) {
+      .progress-dashboard { padding: 20px 18px; }
+      .progress-grid { gap: 18px; grid-template-columns: auto minmax(0,1fr); }
+      .progress-ring { width: 106px; height: 106px; }
+      .progress-ring::before { width: calc(100% - 17px); height: calc(100% - 17px); }
+      .progress-ring-center strong { font-size: 23px; }
+      .progress-ring-center small { font-size: 9px; }
+      .progress-metrics { gap: 8px; margin-bottom: 12px; }
+      .progress-metric b { font-size: 19px; }
+      .progress-metric small { font-size: 10px; }
+      .progress-caption { font-size: 11px; flex-direction: column; gap: 0; }
+      .progress-summary-layout { grid-template-columns: 1fr; }
+      .progress-items-panel, .progress-guide { padding: 20px 18px; }
+      .nav-link { flex: 1 0 auto; padding: 9px 8px; }
+      .side-nav { overflow-x: auto; justify-content: flex-start; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container header-row">
-      <div>
-        <div class="tagline">YOUR DAILY AI INTELLIGENCE</div>
-        <h1>AI Frontier Radar</h1>
-        <p>少而精的 AI 前沿资讯 · 深度产品解读</p>
-        <div id="updated">演示版本 · 暂未连接实时数据</div>
-      </div>
-      <div class="hero-number">
-        <span id="count">0</span>
-        <small>条精选资讯</small>
-      </div>
+<!-- 图标由页面自身提供，不依赖外部字体或 JS 库。 -->
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12 19 5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m16.5 7.5-3 6-6 3 3-6z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5V4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6m0-6-9 9"/><path d="M20 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h6"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path d="M14 2v6h5M8 13h8M8 17h8"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5 19 19M19 5 5 19"/></symbol>
+  <symbol id="i-news" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h5M7 12h5M7 16h10M15 8h2v4h-2z"/></symbol>
+</svg>
+<div class="app">
+  <aside class="sidebar" aria-label="主导航">
+    <div class="brand">
+      <span class="brand-mark"><svg class="icon lg"><use href="#i-radar"/></svg></span>
+      <div><div class="brand-name">AI Frontier Radar</div><div class="brand-sub">PERSONAL LEARNING SPACE</div></div>
     </div>
-  </header>
-
-  <main class="container">
-    <div class="notice">
-      当前是第一阶段网页原型。所有新闻均为虚构演示内容，
-      尚未接入 RSS、GitHub API 或大模型。
+    <div class="side-caption">WORKSPACE</div>
+    <nav class="side-nav">
+      <button class="nav-link active" data-page-link="home" aria-current="page"><svg class="icon"><use href="#i-grid"/></svg> 我的工作台</button>
+      <button class="nav-link" data-page-link="discover"><svg class="icon"><use href="#i-compass"/></svg> 前沿动态</button>
+      <button class="nav-link" data-page-link="tutorials"><svg class="icon"><use href="#i-book"/></svg> 精选教程</button>
+      <button class="nav-link" data-page-link="progress"><svg class="icon"><use href="#i-clock"/></svg> 学习进度</button>
+      <button class="nav-link" data-page-link="saved"><svg class="icon"><use href="#i-bookmark"/></svg> 我的收藏</button>
+    </nav>
+    <div class="sidebar-foot">
+      <p>让每一条好资料，都能变成真正用得上的知识。</p>
+      <a class="side-external" href="https://github.com/VenusHuang-coder/ai-frontier-radar" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-external"/></svg> 项目 GitHub</a>
     </div>
+  </aside>
 
-    <div class="toolbar">
-      <div class="tabs">
-        <button class="tab active" data-tab="all">全部</button>
-        <button class="tab" data-tab="apps">前沿应用</button>
-        <button class="tab" data-tab="agent">Agent 落地</button>
-        <button class="tab" data-tab="model">模型动态</button>
-        <button class="tab" data-tab="github">GitHub</button>
-        <button class="tab" data-tab="tutorial">AI 入门教程</button>
-        <button class="tab" data-tab="saved">我的收藏</button>
-      </div>
-      <input id="search" placeholder="搜索资讯关键词...">
+  <div class="shell">
+    <div class="topbar">
+      <div><div class="topbar-title" id="topTitle">我的学习工作台</div><div class="topbar-subtitle">AI Frontier Radar · V1</div></div>
+      <div class="topbar-right"><span class="sync-chip"><span class="live-dot"></span>公开资源自动同步</span><span class="top-date" id="topDate"></span></div>
     </div>
+    <main class="content">
+      <section data-page="home">
+        <div class="hero-grid">
+          <div class="hero">
+            <div class="kicker">LEARN · BUILD · REFLECT</div>
+            <h1>每天学一点，真正用得上。</h1>
+            <p>收藏只是开始。从一条值得学的教程出发，动手实践，再把自己的理解沉淀下来。</p>
+            <div class="hero-actions">
+              <button class="btn hero-primary" id="heroStart"><svg class="icon"><use href="#i-book"/></svg> <span id="heroStartText">开始学习</span></button>
+              <button class="btn hero-secondary" data-navigate="discover"><svg class="icon"><use href="#i-compass"/></svg> 发现新内容</button>
+            </div>
+          </div>
+          <div class="quick-panel">
+            <div class="quick-heading"><h2>快捷操作</h2><span class="tag muted">常用入口</span></div>
+            <div class="quick-grid">
+              <button class="quick-action" id="openCollect"><svg class="icon lg"><use href="#i-plus"/></svg><span>快速收藏</span></button>
+              <button class="quick-action" data-navigate="tutorials"><svg class="icon lg"><use href="#i-book"/></svg><span>精选教程</span></button>
+              <button class="quick-action" id="copyFocusNote"><svg class="icon lg"><use href="#i-file"/></svg><span>笔记模板</span></button>
+              <button class="quick-action" data-navigate="saved"><svg class="icon lg"><use href="#i-bookmark"/></svg><span>我的收藏</span></button>
+            </div>
+            <p class="quick-help"><button class="section-link" id="configureCollect">设置飞书收藏链接</button> · 链接仅保存在当前浏览器</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div><span class="number" id="statNews">—</span><div class="caption">最新资讯</div></div><span class="stat-icon"><svg class="icon lg"><use href="#i-news"/></svg></span></div>
+          <div class="stat"><div><span class="number" id="statTutorials">—</span><div class="caption">精选教程</div></div><span class="stat-icon"><svg class="icon lg"><use href="#i-book"/></svg></span></div>
+          <div class="stat"><div><span class="number" id="statLearning">0</span><div class="caption">我的学习中</div></div><span class="stat-icon"><svg class="icon lg"><use href="#i-clock"/></svg></span></div>
+        </div>
+        <section class="progress-dashboard" aria-labelledby="homeProgressHeading">
+          <div class="progress-head">
+            <div><h2 id="homeProgressHeading">学习进度</h2><p>基于你加入学习计划的教程，跟踪真实进展</p></div>
+            <button class="section-link" data-navigate="progress">查看学习计划 →</button>
+          </div>
+          <div class="progress-grid">
+            <div class="progress-ring" id="homeProgressRing" role="img" aria-label="学习计划完成度：0%"><div class="progress-ring-center"><strong id="homeProgressPercent">0%</strong><small>总体进度</small></div></div>
+            <div>
+              <div class="progress-metrics">
+                <div class="progress-metric"><b id="homePlanned">0</b><small>计划教程</small></div>
+                <div class="progress-metric"><b id="homeOngoing">0</b><small>学习中</small></div>
+                <div class="progress-metric"><b id="homeCompleted">0</b><small>已完成</small></div>
+              </div>
+              <div class="progress-meter" role="progressbar" aria-label="学习计划完成度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="homeProgressTrack"><div class="progress-meter-fill" id="homeProgressFill"></div></div>
+              <div class="progress-caption"><span>手动记录每条教程进度，完成一项就积累一项</span><span id="homeProgressNumerator">0 / 0</span></div>
+            </div>
+          </div>
+        </section>
+        <div class="two-col">
+          <div>
+            <div class="section-heading"><div><h2>继续学习</h2><p>不用重新翻找收藏夹，从当前任务接着做</p></div><button class="section-link" data-navigate="tutorials">全部教程 →</button></div>
+            <div class="focus-card" id="focusCard"><div class="empty">正在读取你的精选教程…</div></div>
+          </div>
+          <div>
+            <div class="section-heading"><div><h2>最新 AI 动态</h2><p id="lastUpdated">正在读取采集时间…</p></div><button class="section-link" data-navigate="discover">查看更多 →</button></div>
+            <div class="feed-list" id="homeNews"><div class="feed-row subtle">正在读取新闻…</div></div>
+          </div>
+        </div>
+        <div class="knowledge-strip"><div><h3>把“看过”变成“会用”</h3><p>在教程卡片中一键复制 Markdown 笔记模板，粘贴到 Obsidian，补充自己的练习记录。</p></div><button class="btn primary" id="stripCopy"><svg class="icon"><use href="#i-copy"/></svg> 复制笔记模板</button></div>
+      </section>
 
-    <section id="newsGrid" class="grid"></section>
-  </main>
+      <section data-page="discover" hidden>
+        <div class="page-heading panel-heading"><div><div class="kicker">DISCOVER</div><h1>AI 前沿动态</h1><p class="lead">来自真实资讯源与 GitHub。先发现，再判断是否值得深入学习。</p></div><span class="tag muted" id="newsCountLabel">加载中</span></div>
+        <div class="filter-bar"><label class="search-wrap"><svg class="icon"><use href="#i-search"/></svg><input id="newsSearch" type="search" placeholder="搜索模型、Agent、工具、关键词…" aria-label="搜索资讯"></label></div>
+        <div class="chips" id="newsFilters" role="group" aria-label="资讯分类"><button class="chip active" data-news-category="all">全部资讯</button><button class="chip" data-news-category="apps">前沿应用</button><button class="chip" data-news-category="agent">Agent</button><button class="chip" data-news-category="model">模型动态</button><button class="chip" data-news-category="github">GitHub</button></div>
+        <div class="cards" id="newsCards"></div>
+      </section>
 
-  <dialog id="detailDialog">
-    <div class="dialog-top">
-      <button class="close" id="closeDialog">关闭 ✕</button>
-    </div>
-    <div id="detailContent"></div>
-  </dialog>
+      <section data-page="tutorials" hidden>
+        <div class="page-heading panel-heading"><div><div class="kicker">LEARNING LIBRARY</div><h1>精选学习教程</h1><p class="lead">来自飞书审核和人工精选，按主题、平台与难度找到真正能跟做的内容。</p></div><span class="tag muted" id="tutorialCountLabel">加载中</span></div>
+        <div class="filter-bar">
+          <label class="search-wrap"><svg class="icon"><use href="#i-search"/></svg><input id="tutorialSearch" type="search" placeholder="搜索 Obsidian、n8n、Dify、Agent…" aria-label="搜索教程"></label>
+          <select id="difficultyFilter" aria-label="按学习难度筛选"><option value="all">全部难度</option><option value="beginner">零基础</option><option value="intermediate">初级实操</option><option value="advanced">进阶项目</option><option value="unknown">未分类</option></select>
+          <select id="platformFilter" aria-label="按平台筛选"><option value="all">全部平台</option><option value="bilibili">B站</option><option value="youtube">YouTube</option><option value="xiaohongshu">小红书</option></select>
+        </div>
+        <div class="cards" id="tutorialCards"></div>
+      </section>
 
-  <footer>
-    AI Frontier Radar · 个人学习项目<br>
-    后续将支持每日北京时间 08:30 自动更新
-  </footer>
+      <section data-page="progress" hidden>
+        <div class="page-heading panel-heading"><div><div class="kicker">LEARNING PROGRESS</div><h1>学习进度</h1><p class="lead">每条教程都可以记录 0–100% 的学习进展。进度由你决定，不自动猜测观看时长。</p></div><span class="tag muted" id="progressCountLabel">0 项学习计划</span></div>
+        <section class="progress-dashboard" aria-labelledby="progressPageHeading">
+          <div class="progress-head"><div><h2 id="progressPageHeading">学习计划完成度</h2><p>仅统计你标记为「学习中」或「已学完」的教程</p></div></div>
+          <div class="progress-grid">
+            <div class="progress-ring" id="pageProgressRing" role="img" aria-label="学习计划完成度：0%"><div class="progress-ring-center"><strong id="pageProgressPercent">0%</strong><small>总体进度</small></div></div>
+            <div>
+              <div class="progress-metrics">
+                <div class="progress-metric"><b id="pagePlanned">0</b><small>计划教程</small></div>
+                <div class="progress-metric"><b id="pageOngoing">0</b><small>学习中</small></div>
+                <div class="progress-metric"><b id="pageCompleted">0</b><small>已完成</small></div>
+              </div>
+              <div class="progress-meter" role="progressbar" aria-label="学习计划完成度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pageProgressTrack"><div class="progress-meter-fill" id="pageProgressFill"></div></div>
+              <div class="progress-caption"><span>按每个任务的手动进度计算平均完成率</span><span id="pageProgressNumerator">0 / 0</span></div>
+            </div>
+          </div>
+        </section>
+        <div class="progress-summary-layout">
+          <div class="progress-items-panel">
+            <div class="section-heading"><div><h2>我的学习清单</h2><p>拖动进度条记录完成程度，完成 100% 自动标记已学完</p></div><button class="section-link" data-navigate="tutorials">添加教程 →</button></div>
+            <div class="progress-items" id="progressPageItems"></div>
+          </div>
+          <aside class="progress-guide"><div class="kicker">HOW TO USE</div><h3 style="margin-top:12px">真正的进步，不靠收藏数量。</h3><p>① 在精选教程中点击「开始学习」，加入你的计划。</p><p>② 看完一段或完成一个练习，就拖动进度条，记录真实进展。</p><p>③ 完成后复制 Obsidian Markdown 笔记模板，把学到的方法留在自己的知识库。</p><button class="btn primary" data-navigate="tutorials">寻找下一条教程 →</button><p style="font-size:12px;margin-top:16px">所有学习状态和百分比只保存在当前浏览器，暂不跨设备同步。</p></aside>
+        </div>
+      </section>
 
-  <script>
-    // 第一阶段：数据已切换为news.json
-   let news = [];
-   let tutorials = [];
+      <section data-page="saved" hidden>
+        <div class="page-heading panel-heading"><div><div class="kicker">MY COLLECTION</div><h1>我的收藏</h1><p class="lead">保留想回看的好资料。下一步再把它们变成实际任务和个人知识卡片。</p></div></div>
+        <div class="privacy">收藏和学习状态暂时只存储在当前浏览器中，不会同步到 Mac、iPhone，也不会写入公开的 GitHub 仓库。</div>
+        <div class="section-heading"><h2>收藏的教程</h2><button class="section-link" data-navigate="tutorials">浏览教程 →</button></div>
+        <div class="cards" id="savedTutorialCards"></div>
+        <div class="saved-section"><div class="section-heading"><h2>收藏的资讯</h2><button class="section-link" data-navigate="discover">浏览资讯 →</button></div><div class="cards" id="savedNewsCards"></div></div>
+      </section>
+      <footer>AI Frontier Radar · 发现值得学的 AI，积累能够复用的能力<br>数据来自公开资讯源与人工审核教程 · 以实际采集时间为准</footer>
+    </main>
+  </div>
+</div>
 
+<dialog id="detailDialog"><div class="dialog-body"><div class="dialog-heading"><div><h2 id="detailTitle">资讯详情</h2><p id="detailSource"></p></div><button class="dialog-close" id="detailClose" aria-label="关闭详情"><svg class="icon"><use href="#i-x"/></svg></button></div><div id="detailSections"></div><div id="detailActions" style="margin-top:18px"></div></div></dialog>
+<dialog id="collectDialog"><div class="dialog-body"><div class="dialog-heading"><div><h2>设置收藏快捷入口</h2><p>建议填写飞书「快速收藏表单」的直接链接。</p></div><button class="dialog-close" id="collectClose" aria-label="关闭设置"><svg class="icon"><use href="#i-x"/></svg></button></div><label for="collectUrl" class="form-label">飞书收藏表单链接</label><input id="collectUrl" class="form-input" type="url" inputmode="url" placeholder="https://...feishu.cn/..."><p class="form-help">仅保存在当前设备的浏览器中，不会上传到公开仓库。尚未设置时，「快速收藏」会打开飞书首页。</p><div class="form-actions"><button class="btn" id="clearCollect">清除</button><button class="btn primary" id="saveCollect">保存链接</button></div></div></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
 
-    async function loadNews() {
-    const grid = document.getElementById("newsGrid");
-    grid.textContent = "正在加载最新资讯...";
-
-    try {
-        const response = await fetch("./news.json", {
-        cache: "no-store"
-        });
-
-        if (!response.ok) {
-        throw new Error("HTTP " + response.status);
-        }
-
-        const data = await response.json();
-        if (!Array.isArray(data.items)) {
-        throw new Error("资讯数据格式不正确");
-        }
-
-        news = data.items;
-
-        const updated = new Date(data.generated_at);
-        document.getElementById("updated").textContent =
-        "最近采集：" +
-        (isNaN(updated.getTime())
-            ? "未知"
-            : updated.toLocaleString("zh-CN", {
-                timeZone: "Asia/Shanghai"
-            })) +
-        "（北京时间）";
-
-        document.querySelector(".notice").textContent =
-        "以下内容来自公开信息源。当前展示原始标题与摘要，" +
-        "尚未进行 AI 深度分析，请点击原文核实。";
-
-        render();
-    } catch (error) {
-        grid.textContent =
-        "资讯加载失败，请检查 news.json 和本地服务器。";
-        console.error("加载失败：", error);
+<script>
+(() => {
+  'use strict';
+  const FEISHU_HOME = 'https://my.feishu.cn/';
+  const KEYS = { newsSaved: 'radarSaved', tutorialSaved: 'radarTutorialSaved', learning: 'radarLearningV1', progress: 'radarTutorialProgressV1', collect: 'radarCollectURL' };
+  const NEWS_CATEGORIES = { apps: '前沿应用', agent: 'Agent', model: '模型动态', github: 'GitHub' };
+  const PLATFORMS = { bilibili: 'B站', youtube: 'YouTube', xiaohongshu: '小红书' };
+  const DIFFICULTIES = { beginner: '零基础', intermediate: '初级实操', advanced: '进阶项目', unknown: '未分类' };
+  const PAGE_TITLES = { home: '我的学习工作台', discover: 'AI 前沿动态', tutorials: '精选学习教程', progress: '学习进度', saved: '我的收藏' };
+  const state = { page: 'home', news: [], tutorials: [], newsReady: false, tutorialReady: false, newsError: false, tutorialError: false, newsCategory: 'all', updatedAt: null };
+  const $ = id => document.getElementById(id);
+  function icon(name, size = '') { const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'icon' + (size ? ' ' + size : '')); svg.setAttribute('aria-hidden','true'); const use = document.createElementNS('http://www.w3.org/2000/svg', 'use'); use.setAttribute('href', '#i-' + name); svg.appendChild(use); return svg; }
+  function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined && text !== null) n.textContent = String(text); return n; }
+  function readStored(key, fallback) { try { const raw = localStorage.getItem(key); return raw === null ? fallback : JSON.parse(raw); } catch { return fallback; } }
+  function writeStored(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { toast('当前浏览器不允许保存本地数据'); } }
+  function readText(key) { try { return localStorage.getItem(key) || ''; } catch { return ''; } }
+  function writeText(key, val) { try { if (val) localStorage.setItem(key, val); else localStorage.removeItem(key); } catch { toast('当前浏览器不允许保存链接'); } }
+  let savedNews = readStored(KEYS.newsSaved, []);
+  let savedTutorials = readStored(KEYS.tutorialSaved, []);
+  let learning = readStored(KEYS.learning, {});
+  let progress = readStored(KEYS.progress, {});
+  if (!Array.isArray(savedNews)) savedNews = [];
+  if (!Array.isArray(savedTutorials)) savedTutorials = [];
+  if (!learning || typeof learning !== 'object' || Array.isArray(learning)) learning = {};
+  if (!progress || typeof progress !== 'object' || Array.isArray(progress)) progress = {};
+  function safeUrl(input) { try { const u = new URL(input); return u.protocol === 'https:' ? u.href : null; } catch { return null; } }
+  function toast(message) { const t = $('toast'); t.textContent = message; t.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => t.hidden = true, 3000); }
+  const normalize = value => String(value || '').toLowerCase();
+  function dateBeijing(value, showTime = true) { const d = new Date(value); return Number.isNaN(d.getTime()) ? '时间未知' : d.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit', ...(showTime ? {hour:'2-digit', minute:'2-digit', hour12:false} : {})}); }
+  function btn(label, callback, cls='btn small') { const b = el('button', cls, label); b.type='button'; b.addEventListener('click', callback); return b; }
+  function link(label, url, cls='text-link') { const a = el('a', cls, label); const safe = safeUrl(url); if (safe) { a.href=safe; a.target='_blank'; a.rel='noopener noreferrer'; } else { a.setAttribute('aria-disabled','true'); a.style.opacity='.5'; a.removeAttribute('href'); } return a; }
+  function openExternal(url) { const safe = safeUrl(url); if (safe) window.open(safe,'_blank','noopener,noreferrer'); else toast('链接无效，请在飞书中检查原始地址'); }
+  function navigate(page) { state.page = PAGE_TITLES[page] ? page : 'home'; document.querySelectorAll('[data-page]').forEach(section => section.hidden = section.dataset.page !== state.page); document.querySelectorAll('[data-page-link]').forEach(b => { const active = b.dataset.pageLink === state.page; b.classList.toggle('active', active); if (active) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); }); $('topTitle').textContent = PAGE_TITLES[state.page]; if (location.hash.slice(1) !== state.page) history.replaceState(null,'','#' + state.page); renderCurrent(); window.scrollTo({top:0, behavior:'auto'}); }
+  function toggleBookmark(id, kind) { const list = kind === 'tutorial' ? savedTutorials : savedNews; const next = list.includes(id) ? list.filter(x => x !== id) : [...list,id]; if (kind === 'tutorial') { savedTutorials=next; writeStored(KEYS.tutorialSaved, next); } else { savedNews=next; writeStored(KEYS.newsSaved, next); } renderCurrent(); toast(next.includes(id) ? '已加入收藏' : '已取消收藏'); }
+  function getProgress(id) { if (learning[id] === 'done') return 100; const value = Number(progress[id]); return Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value))) : 0; }
+  function updateLearning(id, status) {
+    if (status === null) { delete learning[id]; delete progress[id]; }
+    else if (status === 'done') { learning[id] = 'done'; progress[id] = 100; }
+    else { learning[id] = 'learning'; if (getProgress(id) === 100) progress[id] = 0; }
+    writeStored(KEYS.learning, learning); writeStored(KEYS.progress, progress); renderCurrent();
+    toast(status === 'learning' ? '已加入学习计划，可调整进度' : status === 'done' ? '已完成，做得好！' : '已移出学习计划');
+  }
+  function updateProgress(id, pct) {
+    const value = Math.max(0, Math.min(100, Math.round(Number(pct) || 0)));
+    progress[id] = value; learning[id] = value === 100 ? 'done' : 'learning';
+    writeStored(KEYS.learning, learning); writeStored(KEYS.progress, progress); renderCurrent();
+    toast(value === 100 ? '恭喜完成这条教程' : '学习进度已保存：' + value + '%');
+  }
+  function progressOverview() {
+    const items = state.tutorials.filter(t => learning[t.id] === 'learning' || learning[t.id] === 'done');
+    const completed = items.filter(t => learning[t.id] === 'done').length;
+    const ongoing = items.length - completed;
+    const percent = items.length ? Math.round(items.reduce((sum, t) => sum + getProgress(t.id), 0) / items.length) : 0;
+    return { items, completed, ongoing, percent };
+  }
+  function renderProgressNumbers(prefix, overview) {
+    $(prefix + 'ProgressPercent').textContent = overview.percent + '%';
+    $(prefix + 'ProgressRing').style.setProperty('--pct', overview.percent + '%');
+    $(prefix + 'ProgressRing').setAttribute('aria-label', '学习计划完成度：' + overview.percent + '%');
+    $(prefix + 'Planned').textContent = overview.items.length;
+    $(prefix + 'Ongoing').textContent = overview.ongoing;
+    $(prefix + 'Completed').textContent = overview.completed;
+    $(prefix + 'ProgressFill').style.width = overview.percent + '%';
+    $(prefix + 'ProgressTrack').setAttribute('aria-valuenow', String(overview.percent));
+    $(prefix + 'ProgressNumerator').textContent = overview.completed + ' 项完成 / ' + overview.items.length + ' 项计划';
+  }
+  function addProgressControls(container, item, compact = false) {
+    const pct = getProgress(item.id);
+    const wrap = el('div', compact ? 'inline-progress' : '');
+    const head = el('div', 'inline-progress-head');
+    head.append(el('span', '', learning[item.id] === 'done' ? '已完成' : '当前进度'), el('strong', '', pct + '%'));
+    const track = el('div', 'progress-meter');
+    const fill = el('div', 'progress-meter-fill'); fill.style.width = pct + '%'; track.appendChild(fill);
+    wrap.append(head, track);
+    if (learning[item.id] === 'learning') {
+      const sliderWrap = el('label', 'progress-range-wrap');
+      const slider = el('input'); slider.type = 'range'; slider.min = '0'; slider.max = '100'; slider.step = '10'; slider.value = String(pct); slider.setAttribute('aria-label', '调整《' + item.title + '》学习进度');
+      const label = el('span', 'progress-range-label', '拖动调整');
+      slider.addEventListener('input', () => { fill.style.width = slider.value + '%'; head.lastChild.textContent = slider.value + '%'; });
+      slider.addEventListener('change', () => updateProgress(item.id, slider.value));
+      sliderWrap.append(slider, label); wrap.appendChild(sliderWrap);
     }
+    container.appendChild(wrap);
+  }
+  function renderProgressPage() {
+    const o = progressOverview(); renderProgressNumbers('page', o);
+    $('progressCountLabel').textContent = o.items.length + ' 项学习计划';
+    const list = $('progressPageItems'); list.replaceChildren();
+    if (!o.items.length) {
+      const empty = el('div', 'empty'); empty.append(el('h3', '', '尚未开始学习计划'), el('p', '', '去精选教程点击「开始学习」，这里就会出现你的进度。'));
+      empty.appendChild(btn('浏览精选教程 →', () => navigate('tutorials'), 'btn primary small'));
+      list.appendChild(empty); return;
     }
-
-
-    const names = {
-      apps: "前沿应用",
-      agent: "Agent 落地",
-      model: "模型动态",
-      github: "GitHub"
-    };
-
-    const platforms = {
-    bilibili: "B站",
-    youtube: "YouTube",
-    xiaohongshu: "小红书"
-    };
-
-    const difficulties = {
-    beginner: "零基础",
-    intermediate: "初级实操",
-    advanced: "进阶项目"
-    };
-
-    async function loadTutorials() {
-    try {
-        const response = await fetch("./tutorials.json", {
-        cache: "no-store"
-        });
-
-        if (!response.ok) {
-        throw new Error("HTTP " + response.status);
-        }
-
-        const data = await response.json();
-
-        if (!Array.isArray(data.items)) {
-        throw new Error("教程 JSON 格式不正确");
-        }
-
-        tutorials = data.items;
-        render();
-        console.log("教程加载成功：", tutorials.length);
-    } catch (error) {
-        console.error("教程加载失败：", error);
-        tutorials = [];
-        render();
-    }
-    }
-
-
-    let currentTab = "all";
-    let saved = [];
-
-    try {
-      saved = JSON.parse(localStorage.getItem("radarSaved") || "[]");
-      if (!Array.isArray(saved)) saved = [];
-    } catch {
-      saved = [];
-    }
-
-    function renderTutorials() {
-    const keyword = document.getElementById("search")
-        .value.trim().toLowerCase();
-
-    const grid = document.getElementById("newsGrid");
-    grid.replaceChildren();
-
-
-const filtered = tutorials.filter(item => {
-    const text = [
-        item.title,
-        item.summary,
-        item.topic,
-        item.creator,
-        platforms[item.platform],
-        item.learning_value || ""
-    ].join(" ").toLowerCase();
-    return text.includes(keyword);
-});
-
-    document.getElementById("count").textContent = filtered.length;
-
-    if (filtered.length === 0) {
-        const empty = document.createElement("p");
-        empty.textContent = "暂无符合条件的教程。";
-        grid.appendChild(empty);
-        return;
-    }
-
-    filtered.forEach(item => {
-        const card = document.createElement("article");
-        card.className = "card";
-
-        const category = document.createElement("span");
-        category.className = "category";
-        category.textContent =
-        (platforms[item.platform] || item.platform) +
-        " · " +
-        (difficulties[item.difficulty] || "未分类");
-
-        const title = document.createElement("h2");
-        title.textContent = item.title;
-
-        const summary = document.createElement("p");
-        summary.textContent = item.summary || "";
-
-        const topic = document.createElement("div");
-        topic.className = "meta";
-        topic.textContent =
-        "主题：" + (item.topic || "未分类") +
-        " · 作者：" + (item.creator || "未知");
-        
-        const reasonTitle = document.createElement("strong");
-        reasonTitle.textContent = "推荐理由：";
-        
-        const reason = document.createElement("p");
-        reason.textContent = item.learning_value || "暂无推荐理由";
-
-
-        const actions = document.createElement("div");
-        actions.className = "card-actions";
-
-        const isVerified = item.verified === true &&
-        typeof item.url === "string" &&
-        /^https:\/\/.+/.test(item.url);
-
-        if (isVerified) {
-        const link = document.createElement("a");
-        link.href = item.url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.className = "read";
-        link.textContent = "查看原教程 →";
-        actions.appendChild(link);
-        } else {
-        const label = document.createElement("span");
-        label.className = "meta";
-        label.textContent = "演示内容 · 暂无可用教程链接";
-        actions.appendChild(label);
-        }
-
-
-        card.append(
-            category,
-            title,
-            summary,
-            topic,
-            reasonTitle,
-            reason,
-            actions
-        );
-
-        grid.appendChild(card);
+    const sorted = [...o.items].sort((a,b) => (learning[a.id] === 'done') - (learning[b.id] === 'done'));
+    sorted.forEach(t => {
+      const row = el('article', 'progress-item');
+      row.append(el('div', 'progress-item-title', t.title), el('div', 'progress-item-meta', (PLATFORMS[t.platform] || '精选教程') + ' · ' + (DIFFICULTIES[t.difficulty] || '未分类')));
+      addProgressControls(row, t);
+      const actions = el('div', 'progress-item-actions');
+      actions.appendChild(btn('打开教程 ↗', () => openExternal(t.url), 'btn small'));
+      actions.appendChild(btn('笔记模板', () => copyNote(t), 'btn small'));
+      if (learning[t.id] === 'learning') actions.appendChild(btn('标记完成', () => updateLearning(t.id,'done'), 'btn small'));
+      else actions.appendChild(btn('重新学习', () => updateLearning(t.id,'learning'), 'btn small'));
+      actions.appendChild(btn('移出计划', () => updateLearning(t.id,null), 'btn ghost small'));
+      row.appendChild(actions); list.appendChild(row);
     });
+  }
+  function getFocus() { const active = state.tutorials.find(t => learning[t.id]==='learning'); return active || state.tutorials.find(t => /obsidian/i.test([t.title,t.topic].join(' '))) || state.tutorials.find(t=>t.difficulty==='beginner') || state.tutorials[0] || null; }
+  function copyNote(item) { const title=item?.title || '我的 AI 学习笔记'; const url=safeUrl(item?.url || '') || '待补充'; const text=[`# ${title}`, '', `- 来源：${url}`, `- 主题：${item?.topic || '待补充'}`, `- 学习状态：${item && learning[item.id] === 'done' ? '已完成' : item && learning[item.id] === 'learning' ? '学习中' : '待开始'}`, `- 当前进度：${item ? getProgress(item.id) : 0}%`, '', '## 一句话总结', '> 用自己的话写下这项工具或方法解决什么问题。', '', '## 核心知识点', '- ', '', '## 我的实操记录', '- 我做了什么：', '- 运行结果：', '- 遇到的问题：', '', '## 我的理解与思考', '- ', '', '## 后续行动', '- [ ] ', '', '## 推荐理由（原资料）', item?.learning_value || '待补充', '', '## 相关知识', '[[AI学习]]', ''].join('\n'); copyText(text, 'Markdown 学习笔记已复制，打开 Obsidian 粘贴即可'); }
+  async function copyText(text, message) { try { if (!navigator.clipboard || !navigator.clipboard.writeText) throw Error('Clipboard API unavailable'); await navigator.clipboard.writeText(text); toast(message); } catch { const area=el('textarea'); area.value=text; area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.select(); const ok=document.execCommand('copy'); area.remove(); toast(ok?message:'复制失败，请使用 HTTPS 网站或手动复制'); } }
+  function renderHome() {
+    $('statNews').textContent=state.newsReady ? state.news.length : '—';
+    $('statTutorials').textContent=state.tutorialReady ? state.tutorials.length : '—';
+    const overview=progressOverview();
+    $('statLearning').textContent=overview.ongoing;
+    renderProgressNumbers('home', overview);
+    $('lastUpdated').textContent=state.updatedAt ? '最近采集：' + dateBeijing(state.updatedAt) + '（北京时间）' : (state.newsError?'资讯暂未加载':'正在读取采集时间…');
+    const focus=getFocus(); const box=$('focusCard'); box.replaceChildren();
+    if (!focus) { box.appendChild(el('p','subtle',state.tutorialReady?'目前没有精选教程，请先在飞书审核发布一条。':'正在读取教程…')); }
+    else {
+      const tag=el('span','tag',learning[focus.id]==='learning'?'学习中':learning[focus.id]==='done'?'已学完':'推荐先学');
+      const name=el('h3','',focus.title); const summary=el('p','',focus.summary || '打开原教程，按步骤动手实践。');
+      const meta=el('div','focus-meta',(PLATFORMS[focus.platform] || focus.platform || '精选教程')+' · '+(DIFFICULTIES[focus.difficulty] || '未分类')+' · '+(focus.creator || '作者待补充'));
+      const actions=el('div','focus-actions'); actions.appendChild(btn('查看原教程 ↗',()=>openExternal(focus.url),'btn primary small'));
+      if (learning[focus.id]!=='learning') actions.appendChild(btn('标记学习中',()=>updateLearning(focus.id,'learning'),'btn small'));
+      else actions.appendChild(btn('标记已学完',()=>updateLearning(focus.id,'done'),'btn small'));
+      actions.appendChild(btn('复制笔记模板',()=>copyNote(focus),'btn small'));
+      box.append(tag,name,summary,meta);
+      if (learning[focus.id] === 'learning' || learning[focus.id] === 'done') addProgressControls(box, focus, true);
+      box.appendChild(actions);
     }
-
-    function render() {
-        if (currentTab === "tutorial") {
-            renderTutorials();
-            return;
-        }
-      const keyword = document.getElementById("search")
-        .value.trim().toLowerCase();
-
-      const filtered = news.filter(item => {
-        const matchTab = currentTab === "all"
-          || item.category === currentTab
-          || (currentTab === "saved" && saved.includes(item.id));
-
-        const matchSearch = (
-          item.title + " " + item.summary + " " + item.insight
-        ).toLowerCase().includes(keyword);
-
-        return matchTab && matchSearch;
-      });
-
-      document.getElementById("count").textContent = filtered.length;
-      const grid = document.getElementById("newsGrid");
-      grid.replaceChildren();
-
-      if (filtered.length === 0) {
-        const message = document.createElement("p");
-        message.textContent = "没有找到符合条件的资讯。";
-        grid.appendChild(message);
-        return;
-      }
-
-      filtered.forEach(item => {
-        const card = document.createElement("article");
-        card.className = "card";
-
-        const category = document.createElement("span");
-        category.className = "category";
-        category.textContent = names[item.category];
-
-        const title = document.createElement("h2");
-        title.textContent = item.title;
-
-        const summary = document.createElement("p");
-        summary.textContent = item.summary;
-
-        const meta = document.createElement("div");
-        meta.className = "meta";
-        meta.textContent = item.source + " · " + item.date;
-
-        const actions = document.createElement("div");
-        actions.className = "card-actions";
-
-        const read = document.createElement("button");
-        read.className = "read";
-        read.textContent = "阅读详细分析 →";
-        read.addEventListener("click", () => openDetail(item));
-
-        const save = document.createElement("button");
-        save.className = "save";
-        save.textContent = saved.includes(item.id) ? "★ 已收藏" : "☆ 收藏";
-        if (saved.includes(item.id)) save.classList.add("saved");
-        save.addEventListener("click", () => toggleSave(item.id));
-
-        actions.append(read, save);
-        card.append(category, title, summary, meta, actions);
-        grid.appendChild(card);
-      });
-    }
-
-    function toggleSave(id) {
-      saved = saved.includes(id)
-        ? saved.filter(value => value !== id)
-        : [...saved, id];
-
-      try {
-        localStorage.setItem("radarSaved", JSON.stringify(saved));
-      } catch {
-        // 浏览器禁止本地存储时，本次页面仍可临时收藏
-      }
-      render();
-    }
-
-    function openDetail(item) {
-      const content = document.getElementById("detailContent");
-      content.replaceChildren();
-
-      const heading = document.createElement("h2");
-      heading.textContent = item.title;
-      content.appendChild(heading);
-
-      const fields = [
-        ["核心内容", item.summary],
-        ["主要变化", item.change],
-        ["创新点", item.innovation],
-        ["实际应用", item.practice],
-        ["AI 产品经理视角", item.insight]
-      ];
-
-      fields.filter(([label, value]) => value)
-  .forEach(([label, value]) => {
-        const section = document.createElement("section");
-        section.className = "detail-section";
-        const h3 = document.createElement("h3");
-        h3.textContent = label;
-        const p = document.createElement("p");
-        p.textContent = value;
-        section.append(h3, p);
-        content.appendChild(section);
-      });
-
-      if (item.url) {
-        const link = document.createElement("a");
-        link.href = item.url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = "查看官方原文 →";
-        content.appendChild(link);
-      } else {
-        const note = document.createElement("p");
-        note.className = "meta";
-        note.textContent = "演示数据，不提供真实原文链接。";
-        content.appendChild(note);
-      }
-
-      document.getElementById("detailDialog").showModal();
-    }
-
-    document.querySelectorAll(".tab").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".tab").forEach(b =>
-          b.classList.remove("active")
-        );
-        button.classList.add("active");
-        currentTab = button.dataset.tab;
-        render();
-      });
+    const feed=$('homeNews'); feed.replaceChildren();
+    if (!state.news.length) feed.appendChild(el('div','feed-row subtle',state.newsError?'资讯加载失败，请稍后刷新':'暂无资讯，等待采集更新。'));
+    state.news.slice(0,4).forEach(n=>{ const row=el('div','feed-row'); row.appendChild(el('div','subtle', (NEWS_CATEGORIES[n.category] || 'AI 动态')+' · '+(n.source || '公开来源'))); row.appendChild(link(n.title,n.url,'')); feed.appendChild(row); });
+    $('heroStartText').textContent=focus && learning[focus.id]==='learning'?'继续学习':'开始学习';
+  }
+  function renderNews(containerId, items) { const grid=$(containerId); grid.replaceChildren(); if (!items.length) { const msg=el('div','empty'); msg.append(el('h3','',state.newsError?'资讯加载失败':'暂时没有符合条件的资讯'),el('p','',state.newsError?'请检查 news.json 或稍后重试。':'试试其他分类或搜索关键词。')); grid.appendChild(msg); return; }
+    items.forEach(n => { const card=el('article','resource-card'); card.appendChild(el('span','tag',NEWS_CATEGORIES[n.category] || 'AI 动态')); card.appendChild(el('h3','',n.title)); card.appendChild(el('p','',n.summary || '请查看官方原文了解详细信息。')); const when = n.date ? ' · '+ dateBeijing(n.date,false) : ''; card.appendChild(el('div','meta',(n.source || '公开来源')+when)); const actions=el('div','card-actions'); actions.appendChild(btn('查看详情',()=>openDetail(n),'btn small')); actions.appendChild(link('打开原文 ↗',n.url,'text-link')); actions.appendChild(el('span','grow')); const mark=btn(savedNews.includes(n.id)?'已收藏':'收藏',()=>toggleBookmark(n.id,'news'),'btn small'); actions.appendChild(mark); card.appendChild(actions); grid.appendChild(card); });
+  }
+  function renderTutorialCards(containerId, items) { const grid=$(containerId); grid.replaceChildren(); if (!items.length) { const msg=el('div','empty'); msg.append(el('h3','','暂时没有符合条件的教程'),el('p','','试试其他关键词或在飞书审核新的学习资料。')); grid.appendChild(msg); return; }
+    items.forEach(t => { const card=el('article','resource-card'); const badge=el('div',''); badge.style.display='flex'; badge.style.flexWrap='wrap'; badge.style.gap='7px'; badge.appendChild(el('span','tag',(PLATFORMS[t.platform]||t.platform||'教程')+' · '+(DIFFICULTIES[t.difficulty]||'未分类'))); if(learning[t.id])badge.appendChild(el('span',learning[t.id]==='learning'?'tag amber':'tag muted',learning[t.id]==='learning'?'学习中':'已学完')); card.appendChild(badge); card.appendChild(el('h3','',t.title)); card.appendChild(el('p','',t.summary || '请打开原教程了解详情。')); card.appendChild(el('div','meta','主题：'+(t.topic||'未分类')+' · 作者：'+(t.creator||'待补充'))); if(t.learning_value){ const reason=el('p','reason'); const bold=el('b','', '推荐理由：'); reason.append(bold,document.createTextNode(t.learning_value)); card.appendChild(reason); }
+      if (learning[t.id] === 'learning' || learning[t.id] === 'done') addProgressControls(card, t, true);
+      const actions=el('div','card-actions'); actions.appendChild(link('查看原教程 ↗',t.verified===true ? t.url : null,'text-link')); actions.appendChild(el('span','grow'));
+      actions.appendChild(btn(learning[t.id]==='learning'?'标记学完':learning[t.id]==='done'?'重新学习':'开始学习',()=>updateLearning(t.id,learning[t.id]==='learning'?'done':'learning'),'btn small'));
+      const bookmark=btn(savedTutorials.includes(t.id)?'已收藏':'收藏',()=>toggleBookmark(t.id,'tutorial'),'btn small'); actions.appendChild(bookmark); actions.appendChild(btn('笔记',()=>copyNote(t),'btn small')); card.appendChild(actions); grid.appendChild(card);
     });
-
-    document.getElementById("search")
-      .addEventListener("input", render);
-
-    document.getElementById("closeDialog")
-      .addEventListener("click", () =>
-        document.getElementById("detailDialog").close()
-      );
-
-    document.getElementById("detailDialog")
-      .addEventListener("click", event => {
-        if (event.target.id === "detailDialog") {
-          event.target.close();
-        }
-      });
-
-    loadNews();
-    loadTutorials();
-  </script>
+  }
+  function renderDiscover() { const search=normalize($('newsSearch').value.trim()); const category=state.newsCategory; const items=state.news.filter(n=> (category==='all'||n.category===category) && normalize([n.title,n.summary,n.source,n.insight].join(' ')).includes(search)); $('newsCountLabel').textContent=(state.newsReady?items.length:'—')+' 条资讯'; renderNews('newsCards',items); }
+  function renderTutorials() { const search=normalize($('tutorialSearch').value.trim()), diff=$('difficultyFilter').value, platform=$('platformFilter').value; const items=state.tutorials.filter(t=>normalize([t.title,t.summary,t.topic,t.creator,t.learning_value, PLATFORMS[t.platform]].join(' ')).includes(search) && (diff==='all'||(t.difficulty||'unknown')===diff) && (platform==='all'||t.platform===platform)); $('tutorialCountLabel').textContent=(state.tutorialReady?items.length:'—')+' 条教程'; renderTutorialCards('tutorialCards',items); }
+  function renderSaved() { renderTutorialCards('savedTutorialCards',state.tutorials.filter(t=>savedTutorials.includes(t.id))); renderNews('savedNewsCards',state.news.filter(n=>savedNews.includes(n.id))); }
+  function renderCurrent() { renderHome(); if(state.page==='discover') renderDiscover(); if(state.page==='tutorials') renderTutorials(); if(state.page==='progress') renderProgressPage(); if(state.page==='saved') renderSaved(); }
+  function openDetail(n) { $('detailTitle').textContent=n.title || '资讯详情'; $('detailSource').textContent=(n.source || '公开来源')+(n.date?' · '+dateBeijing(n.date):''); const target=$('detailSections'); target.replaceChildren(); [['核心内容',n.summary],['主要变化',n.change],['创新点',n.innovation],['实际应用',n.practice],['AI 产品视角',n.insight]].forEach(([label,value]) => { if (!value) return; const section=el('section','dialog-section'); section.append(el('h3','',label),el('p','',value)); target.appendChild(section); }); const action=$('detailActions'); action.replaceChildren(); action.appendChild(link('查看官方原文 ↗',n.url,'btn primary')); $('detailDialog').showModal(); }
+  function openCollect() { const custom=readText(KEYS.collect); openExternal(custom || FEISHU_HOME); if(!custom)toast('已打开飞书首页；可点击“设置飞书收藏链接”添加表单直达入口'); }
+  function showCollectSettings() { $('collectUrl').value=readText(KEYS.collect); $('collectDialog').showModal(); }
+  function saveCollectSettings() { const val=$('collectUrl').value.trim(); if (val&&!safeUrl(val)) return toast('请输入以 https:// 开头的有效链接'); writeText(KEYS.collect,val); $('collectDialog').close(); toast('收藏链接已保存在此浏览器'); }
+  async function loadNews() { try { const resp=await fetch('./news.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('资讯数据格式错误'); state.news=data.items; state.newsReady=true; state.updatedAt=data.generated_at || null; } catch(e) { state.newsError=true; console.error('加载新闻失败',e); } renderCurrent(); }
+  async function loadTutorials() { try { const resp=await fetch('./tutorials.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('教程数据格式错误'); state.tutorials=data.items; state.tutorialReady=true; } catch(e) { state.tutorialError=true; console.error('加载教程失败',e); } renderCurrent(); }
+  document.querySelectorAll('[data-page-link]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.pageLink)));
+  document.querySelectorAll('[data-navigate]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.navigate)));
+  document.querySelectorAll('[data-news-category]').forEach(b=>b.addEventListener('click',()=>{state.newsCategory=b.dataset.newsCategory;document.querySelectorAll('[data-news-category]').forEach(x=>x.classList.toggle('active',x===b));renderDiscover();}));
+  $('newsSearch').addEventListener('input',renderDiscover); $('tutorialSearch').addEventListener('input',renderTutorials); $('difficultyFilter').addEventListener('change',renderTutorials); $('platformFilter').addEventListener('change',renderTutorials);
+  $('heroStart').addEventListener('click',()=>{const focus=getFocus(); if(focus&&learning[focus.id]==='learning')openExternal(focus.url); else navigate('tutorials');});
+  $('openCollect').addEventListener('click',openCollect); $('configureCollect').addEventListener('click',showCollectSettings); $('collectClose').addEventListener('click',()=>$('collectDialog').close()); $('saveCollect').addEventListener('click',saveCollectSettings); $('clearCollect').addEventListener('click',()=>{$('collectUrl').value='';writeText(KEYS.collect,'');$('collectDialog').close();toast('收藏快捷链接已清除');});
+  $('copyFocusNote').addEventListener('click',()=>copyNote(getFocus())); $('stripCopy').addEventListener('click',()=>copyNote(getFocus()));
+  $('detailClose').addEventListener('click',()=>$('detailDialog').close());
+  for (const id of ['detailDialog','collectDialog']) $(id).addEventListener('click',e=>{if(e.target===$(id))$(id).close();});
+  $('topDate').textContent=dateBeijing(new Date(),false);
+  window.addEventListener('hashchange',()=>navigate(location.hash.slice(1)));
+  navigate(location.hash.slice(1)||'home');
+  loadNews(); loadTutorials();
+})();
+</script>
 </body>
 </html>
