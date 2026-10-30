@@ -336,18 +336,18 @@
     const grid = document.getElementById("newsGrid");
     grid.replaceChildren();
 
-    const filtered = tutorials.filter(item => {
-        const text = [
+
+const filtered = tutorials.filter(item => {
+    const text = [
         item.title,
         item.summary,
         item.topic,
         item.creator,
         platforms[item.platform],
-        ...(item.learning_outcomes || [])
-        ].join(" ").toLowerCase();
-
-        return text.includes(keyword);
-    });
+        item.learning_value || ""
+    ].join(" ").toLowerCase();
+    return text.includes(keyword);
+});
 
     document.getElementById("count").textContent = filtered.length;
 
@@ -380,16 +380,13 @@
         topic.textContent =
         "主题：" + (item.topic || "未分类") +
         " · 作者：" + (item.creator || "未知");
+        
+        const reasonTitle = document.createElement("strong");
+        reasonTitle.textContent = "推荐理由：";
+        
+        const reason = document.createElement("p");
+        reason.textContent = item.learning_value || "暂无推荐理由";
 
-        const outcomesTitle = document.createElement("strong");
-        outcomesTitle.textContent = "学完你能掌握：";
-
-        const outcomes = document.createElement("ul");
-        (item.learning_outcomes || []).forEach(value => {
-        const li = document.createElement("li");
-        li.textContent = value;
-        outcomes.appendChild(li);
-        });
 
         const actions = document.createElement("div");
         actions.className = "card-actions";
@@ -413,14 +410,15 @@
         actions.appendChild(label);
         }
 
+
         card.append(
-        category,
-        title,
-        summary,
-        topic,
-        outcomesTitle,
-        outcomes,
-        actions
+            category,
+            title,
+            summary,
+            topic,
+            reasonTitle,
+            reason,
+            actions
         );
 
         grid.appendChild(card);
