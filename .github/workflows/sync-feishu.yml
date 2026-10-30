@@ -33,6 +33,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Fetch daily AI news
+        run: python fetch_news.py
+
       - name: Preview Feishu records
         env: &feishu_env
           FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
@@ -49,7 +52,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tutorials.json
+          git add news.json tutorials.json
           if ! git diff --cached --quiet; then
             git commit -m "Sync approved Feishu tutorials"
             git push
