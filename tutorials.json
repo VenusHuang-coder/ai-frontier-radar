@@ -1,4 +1,3 @@
-
 {
   "items": [
     {
@@ -76,6 +75,36 @@
       "recommended_sections": "优先00:20工具介绍、10:05工作流示例、14:16工作流搭建",
       "learning_value": "适合参考完整自动化案例；部分步骤涉及第三方托管服务，不必购买。",
       "verified": true
+    },
+    {
+      "id": "feishu-reczz28TTHnPlv3h",
+      "platform": "bilibili",
+      "title": "如何把Obsidian Web Clipper价值最大化？",
+      "creator": "Next蔡蔡",
+      "url": "https://www.bilibili.com/video/BV1dVopBwEzp/",
+      "difficulty": "intermediate",
+      "topic": "Obsidian与AI",
+      "language": "zh",
+      "summary": "介绍如何最大化利用Obsidian Web Clipper插件，包括其功能、使用方法以及如何通过中文增强插件（obsidian-clipper-cn）支持B站视频字幕和飞书文档的剪存。",
+      "recommended_sections": "",
+      "learning_value": "学习后可以掌握如何高效地使用Obsidian Web Clipper插件来收集和整理信息，提升知识管理效率。",
+      "verified": true,
+      "source": "feishu"
+    },
+    {
+      "id": "feishu-reczz28TThOCIOou",
+      "platform": "bilibili",
+      "title": "用Obsidian打造自进化知识系统，开启你的AI第二大脑",
+      "creator": "大梁Max",
+      "url": "https://www.bilibili.com/video/BV1dGhd68EbW/",
+      "difficulty": "beginner",
+      "topic": "Obsidian与AI",
+      "language": "zh",
+      "summary": "本视频介绍了如何使用Obsidian和AI Agent搭建一个能持续积累、关联和调用知识的“AI第二大脑”。以WorkBuddy为例，完整演示了资料收集、知识提炼、关联建库、问答调用和知识库体检等流程，并通过定时任务实现自动收集、摄入与检查。",
+      "recommended_sections": "",
+      "learning_value": "学习后可以掌握如何利用Obsidian和AI Agent构建个人知识库，提升学习和工作效率。",
+      "verified": true,
+      "source": "feishu"
     }
   ]
 }
