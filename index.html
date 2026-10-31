@@ -401,7 +401,7 @@
 
   <div class="shell">
     <div class="topbar">
-      <div><div class="topbar-title" id="topTitle">我的学习工作台</div><div class="topbar-subtitle">AI Frontier Radar · V1.2</div></div>
+      <div><div class="topbar-title" id="topTitle">我的学习工作台</div><div class="topbar-subtitle">AI Frontier Radar · V1.3</div></div>
       <div class="topbar-right"><span class="sync-chip"><span class="live-dot"></span>公开资源自动同步</span><span class="top-date" id="topDate"></span></div>
     </div>
     <main class="content">
@@ -428,7 +428,7 @@
           </div>
         </div>
         <div class="stats">
-          <div class="stat"><div><span class="number" id="statNews">—</span><div class="caption">最新资讯</div></div><span class="stat-icon"><svg class="icon lg"><use href="#i-news"/></svg></span></div>
+          <div class="stat"><div><span class="number" id="statNews">—</span><div class="caption">近 7 天资讯</div></div><span class="stat-icon"><svg class="icon lg"><use href="#i-news"/></svg></span></div>
           <div class="stat"><div><span class="number" id="statTutorials">—</span><div class="caption">精选教程</div></div><span class="stat-icon"><svg class="icon lg"><use href="#i-book"/></svg></span></div>
           <div class="stat"><div><span class="number" id="statLearning">0</span><div class="caption">我的学习中</div></div><span class="stat-icon"><svg class="icon lg"><use href="#i-clock"/></svg></span></div>
         </div>
@@ -456,7 +456,7 @@
             <div class="focus-card" id="focusCard"><div class="empty">正在读取你的精选教程…</div></div>
           </div>
           <div>
-            <div class="section-heading"><div><h2>最新 AI 动态</h2><p id="lastUpdated">正在读取采集时间…</p></div><button class="section-link" data-navigate="discover">查看更多 →</button></div>
+            <div class="section-heading"><div><h2>近 7 天 AI 动态</h2><p id="lastUpdated">正在读取采集时间…</p></div><button class="section-link" data-navigate="discover">查看更多 →</button></div>
             <div class="feed-list" id="homeNews"><div class="feed-row subtle">正在读取新闻…</div></div>
           </div>
         </div>
@@ -464,7 +464,7 @@
       </section>
 
       <section data-page="discover" hidden>
-        <div class="page-heading panel-heading"><div><div class="kicker">DISCOVER</div><h1>AI 前沿动态</h1><p class="lead">来自真实资讯源与 GitHub。先发现，再判断是否值得深入学习。</p></div><span class="tag muted" id="newsCountLabel">加载中</span></div>
+        <div class="page-heading panel-heading"><div><div class="kicker">DISCOVER</div><h1>AI 前沿动态</h1><p class="lead">展示最近滚动 7 天的资讯，按时间倒序排列；收藏的内容不会因窗口滚动而消失。</p></div><span class="tag muted" id="newsCountLabel">加载中</span></div>
         <div class="filter-bar"><label class="search-wrap"><svg class="icon"><use href="#i-search"/></svg><input id="newsSearch" type="search" placeholder="搜索模型、Agent、工具、关键词…" aria-label="搜索资讯"></label></div>
         <div class="chips" id="newsFilters" role="group" aria-label="资讯分类"><button class="chip active" data-news-category="all">全部资讯</button><button class="chip" data-news-category="apps">前沿应用</button><button class="chip" data-news-category="agent">Agent</button><button class="chip" data-news-category="model">模型动态</button><button class="chip" data-news-category="github">GitHub</button></div>
         <div class="cards" id="newsCards"></div>
@@ -511,7 +511,7 @@
         <div class="privacy">收藏、学习状态与学习随记暂时只存储在当前浏览器。换设备时可先导出/导入随记备份；未来将使用个人登录实现私有同步，不会将私人笔记写入公开 JSON。</div>
         <div class="section-heading"><h2>收藏的教程</h2><button class="section-link" data-navigate="tutorials">浏览教程 →</button></div>
         <div class="cards" id="savedTutorialCards"></div>
-        <div class="saved-section"><div class="section-heading"><h2>收藏的资讯</h2><button class="section-link" data-navigate="discover">浏览资讯 →</button></div><div class="cards" id="savedNewsCards"></div></div>
+        <div class="saved-section"><div class="section-heading"><h2>收藏的资讯</h2><button class="section-link" data-navigate="discover">浏览资讯 →</button></div><p class="subtle" style="margin:0 0 14px;font-size:13px">保存了资讯标题、摘要和原文链接的本地快照。即使资讯超过 7 天仍可回看，但清除浏览器网站数据可能丢失收藏。</p><div class="cards" id="savedNewsCards"></div></div>
       </section>
       <footer>AI Frontier Radar · 发现值得学的 AI，积累能够复用的能力<br>数据来自公开资讯源与人工审核教程 · 以实际采集时间为准</footer>
     </main>
@@ -549,7 +549,7 @@
 (() => {
   'use strict';
   const FEISHU_HOME = 'https://my.feishu.cn/';
-  const KEYS = { newsSaved: 'radarSaved', tutorialSaved: 'radarTutorialSaved', learning: 'radarLearningV1', progress: 'radarTutorialProgressV1', collect: 'radarCollectURL', notes: 'radarNotesV1', noteDrafts: 'radarNoteDraftsV1' };
+  const KEYS = { newsSaved: 'radarSaved', newsArchive: 'radarSavedNewsArchiveV2', tutorialSaved: 'radarTutorialSaved', learning: 'radarLearningV1', progress: 'radarTutorialProgressV1', collect: 'radarCollectURL', notes: 'radarNotesV1', noteDrafts: 'radarNoteDraftsV1' };
   const NEWS_CATEGORIES = { apps: '前沿应用', agent: 'Agent', model: '模型动态', github: 'GitHub' };
   const PLATFORMS = { bilibili: 'B站', youtube: 'YouTube', xiaohongshu: '小红书' };
   const DIFFICULTIES = { beginner: '零基础', intermediate: '初级实操', advanced: '进阶项目', unknown: '未分类' };
@@ -563,10 +563,12 @@
   function readText(key) { try { return localStorage.getItem(key) || ''; } catch { return ''; } }
   function writeText(key, val) { try { if (val) localStorage.setItem(key, val); else localStorage.removeItem(key); } catch { toast('当前浏览器不允许保存链接'); } }
   let savedNews = readStored(KEYS.newsSaved, []);
+  let savedNewsArchive = readStored(KEYS.newsArchive, {});
   let savedTutorials = readStored(KEYS.tutorialSaved, []);
   let learning = readStored(KEYS.learning, {});
   let progress = readStored(KEYS.progress, {});
   if (!Array.isArray(savedNews)) savedNews = [];
+  if (!savedNewsArchive || typeof savedNewsArchive !== 'object' || Array.isArray(savedNewsArchive)) savedNewsArchive = {};
   if (!Array.isArray(savedTutorials)) savedTutorials = [];
   if (!learning || typeof learning !== 'object' || Array.isArray(learning)) learning = {};
   if (!progress || typeof progress !== 'object' || Array.isArray(progress)) progress = {};
@@ -718,7 +720,52 @@
   function link(label, url, cls='text-link') { const a = el('a', cls, label); const safe = safeUrl(url); if (safe) { a.href=safe; a.target='_blank'; a.rel='noopener noreferrer'; } else { a.setAttribute('aria-disabled','true'); a.style.opacity='.5'; a.removeAttribute('href'); } return a; }
   function openExternal(url) { const safe = safeUrl(url); if (safe) window.open(safe,'_blank','noopener,noreferrer'); else toast('链接无效，请在飞书中检查原始地址'); }
   function navigate(page) { state.page = PAGE_TITLES[page] ? page : 'home'; document.querySelectorAll('[data-page]').forEach(section => section.hidden = section.dataset.page !== state.page); document.querySelectorAll('[data-page-link]').forEach(b => { const active = b.dataset.pageLink === state.page; b.classList.toggle('active', active); if (active) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); }); $('topTitle').textContent = PAGE_TITLES[state.page]; if (location.hash.slice(1) !== state.page) history.replaceState(null,'','#' + state.page); renderCurrent(); window.scrollTo({top:0, behavior:'auto'}); }
-  function toggleBookmark(id, kind) { const list = kind === 'tutorial' ? savedTutorials : savedNews; const next = list.includes(id) ? list.filter(x => x !== id) : [...list,id]; if (kind === 'tutorial') { savedTutorials=next; writeStored(KEYS.tutorialSaved, next); } else { savedNews=next; writeStored(KEYS.newsSaved, next); } renderCurrent(); toast(next.includes(id) ? '已加入收藏' : '已取消收藏'); }
+  // 新闻收藏必须保存完整内容快照，不能只保存 ID，因为 news.json 每天更新。
+  // 只保留已知字段，避免将来数据源扩展时把不必要的内容写入本地存储。
+  function snapshotNews(item) {
+    if (!item || typeof item.id !== 'string' || !safeUrl(item.url)) return null;
+    const keys = ['id', 'category', 'title', 'summary', 'source', 'date', 'url',
+                  'change', 'innovation', 'practice', 'insight', 'date_type', 'created_at', 'stars'];
+    const snapshot = {};
+    for (const key of keys) {
+      if (typeof item[key] === 'string' || typeof item[key] === 'number') snapshot[key] = item[key];
+    }
+    return snapshot;
+  }
+  function hydrateSavedNewsArchive() {
+    // 无需重置旧收藏：如果旧 ID 仍存在于 news.json，自动补存一份快照。
+    // 但已经从 news.json 消失且从未保存快照的旧新闻，无法凭 ID 恢复正文。
+    let changed = false;
+    for (const id of savedNews) {
+      if (savedNewsArchive[id]) continue;
+      const item = state.news.find(n => n.id === id);
+      const snapshot = snapshotNews(item);
+      if (snapshot) { savedNewsArchive[id] = snapshot; changed = true; }
+    }
+    if (changed) writeStored(KEYS.newsArchive, savedNewsArchive);
+  }
+  function toggleBookmark(id, kind) {
+    const list = kind === 'tutorial' ? savedTutorials : savedNews;
+    const alreadySaved = list.includes(id);
+    const next = alreadySaved ? list.filter(x => x !== id) : [...list, id];
+    if (kind === 'tutorial') {
+      savedTutorials = next;
+      writeStored(KEYS.tutorialSaved, next);
+    } else {
+      if (alreadySaved) {
+        delete savedNewsArchive[id];
+      } else {
+        const item = state.news.find(n => n.id === id) || savedNewsArchive[id];
+        const snapshot = snapshotNews(item);
+        if (snapshot) savedNewsArchive[id] = snapshot;
+      }
+      savedNews = next;
+      writeStored(KEYS.newsSaved, next);
+      writeStored(KEYS.newsArchive, savedNewsArchive);
+    }
+    renderCurrent();
+    toast(alreadySaved ? '已取消收藏' : '已加入收藏');
+  }
   function getProgress(id) { if (learning[id] === 'done') return 100; const value = Number(progress[id]); return Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value))) : 0; }
   function updateLearning(id, status) {
     if (status === null) { delete learning[id]; delete progress[id]; }
@@ -856,13 +903,24 @@
   }
   function renderDiscover() { const search=normalize($('newsSearch').value.trim()); const category=state.newsCategory; const items=state.news.filter(n=> (category==='all'||n.category===category) && normalize([n.title,n.summary,n.source,n.insight].join(' ')).includes(search)); $('newsCountLabel').textContent=(state.newsReady?items.length:'—')+' 条资讯'; renderNews('newsCards',items); }
   function renderTutorials() { const search=normalize($('tutorialSearch').value.trim()), diff=$('difficultyFilter').value, platform=$('platformFilter').value; const items=state.tutorials.filter(t=>normalize([t.title,t.summary,t.topic,t.creator,t.learning_value, PLATFORMS[t.platform]].join(' ')).includes(search) && (diff==='all'||(t.difficulty||'unknown')===diff) && (platform==='all'||t.platform===platform)); $('tutorialCountLabel').textContent=(state.tutorialReady?items.length:'—')+' 条教程'; renderTutorialCards('tutorialCards',items); }
-  function renderSaved() { renderTutorialCards('savedTutorialCards',state.tutorials.filter(t=>savedTutorials.includes(t.id))); renderNews('savedNewsCards',state.news.filter(n=>savedNews.includes(n.id))); }
+  function renderSaved() {
+    renderTutorialCards('savedTutorialCards', state.tutorials.filter(t => savedTutorials.includes(t.id)));
+    // 优先显示收藏时保存的快照；数据窗口滚动后仍然能够阅读和打开原文。
+    const archived = savedNews.map(id => savedNewsArchive[id] || state.news.find(n => n.id === id)).filter(Boolean);
+    renderNews('savedNewsCards', archived);
+    const missing = savedNews.length - archived.length;
+    if (missing > 0) {
+      const info = el('p', 'subtle', `另有 ${missing} 条旧版收藏仅保存了 ID，原始资讯已被旧新闻文件覆盖。可尝试从 GitHub 的 news.json 历史版本恢复。`);
+      info.style.marginTop = '12px';
+      $('savedNewsCards').appendChild(info);
+    }
+  }
   function renderCurrent() { renderHome(); if(state.page==='discover') renderDiscover(); if(state.page==='tutorials') renderTutorials(); if(state.page==='progress') renderProgressPage(); if(state.page==='saved') renderSaved(); }
   function openDetail(n) { $('detailTitle').textContent=n.title || '资讯详情'; $('detailSource').textContent=(n.source || '公开来源')+(n.date?' · '+dateBeijing(n.date):''); const target=$('detailSections'); target.replaceChildren(); [['核心内容',n.summary],['主要变化',n.change],['创新点',n.innovation],['实际应用',n.practice],['AI 产品视角',n.insight]].forEach(([label,value]) => { if (!value) return; const section=el('section','dialog-section'); section.append(el('h3','',label),el('p','',value)); target.appendChild(section); }); const action=$('detailActions'); action.replaceChildren(); action.appendChild(link('查看官方原文 ↗',n.url,'btn primary')); $('detailDialog').showModal(); }
   function openCollect() { const custom=readText(KEYS.collect); openExternal(custom || FEISHU_HOME); if(!custom)toast('已打开飞书首页；可点击“设置飞书收藏链接”添加表单直达入口'); }
   function showCollectSettings() { $('collectUrl').value=readText(KEYS.collect); $('collectDialog').showModal(); }
   function saveCollectSettings() { const val=$('collectUrl').value.trim(); if (val&&!safeUrl(val)) return toast('请输入以 https:// 开头的有效链接'); writeText(KEYS.collect,val); $('collectDialog').close(); toast('收藏链接已保存在此浏览器'); }
-  async function loadNews() { try { const resp=await fetch('./news.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('资讯数据格式错误'); state.news=data.items; state.newsReady=true; state.updatedAt=data.generated_at || null; } catch(e) { state.newsError=true; console.error('加载新闻失败',e); } renderCurrent(); }
+  async function loadNews() { try { const resp=await fetch('./news.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('资讯数据格式错误'); state.news=data.items; state.newsReady=true; state.updatedAt=data.generated_at || null; hydrateSavedNewsArchive(); } catch(e) { state.newsError=true; console.error('加载新闻失败',e); } renderCurrent(); }
   async function loadTutorials() { try { const resp=await fetch('./tutorials.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('教程数据格式错误'); state.tutorials=data.items; state.tutorialReady=true; } catch(e) { state.tutorialError=true; console.error('加载教程失败',e); } renderCurrent(); }
   document.querySelectorAll('[data-page-link]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.pageLink)));
   document.querySelectorAll('[data-navigate]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.navigate)));
