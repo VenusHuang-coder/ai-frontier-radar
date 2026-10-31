@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fafaf9">
-  <meta name="description" content="AI Frontier Radar：发现优质 AI 资讯和教程，建立自己的轻量 AI 学习工作台。">
+  <meta name="description" content="AI Frontier Radar：AI 学习工作台，精选教程、学习进度、轻量随记与 Obsidian 知识沉淀。">
   <title>AI Frontier Radar · AI 学习工作台</title>
   <style>
     :root {
@@ -319,6 +319,45 @@
       .nav-link { flex: 1 0 auto; padding: 9px 8px; }
       .side-nav { overflow-x: auto; justify-content: flex-start; }
     }
+    /* V1.2: private, lightweight note drawer. */
+    .note-drawer { position: fixed; inset: 0 0 0 auto; margin: 0 0 0 auto; width: min(492px, 100vw); max-height: 100dvh; height: 100dvh; border-radius: 20px 0 0 20px; border: 1px solid #e8e8e6; background: #fff; box-shadow: -16px 0 54px #00000022; }
+    .note-drawer[open] { display: flex; flex-direction: column; }
+    .note-drawer::backdrop { background: #14141466; }
+    .note-head { padding: 22px 24px 16px; display: flex; gap: 16px; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .note-head .kicker { margin: 0 0 5px; }
+    .note-head h2 { font-size: 18px; line-height: 1.45; overflow-wrap: anywhere; }
+    .note-head .subtle { font-size: 12px; margin-top: 5px; }
+    .note-body { padding: 18px 24px 26px; overflow-y: auto; min-height: 0; flex: 1; }
+    .note-meta { display: grid; grid-template-columns: 1fr 144px; gap: 10px; margin: 0 0 13px; }
+    .note-body select, .note-body input { width: 100%; }
+    .note-body label { display: block; font-size: 12px; color: #656565; font-weight: 650; margin: 0 0 6px; }
+    .note-input { width: 100%; min-height: 115px; resize: vertical; border: 1px solid #ddddda; border-radius: 11px; padding: 12px 13px; font: inherit; font-size: 14px; line-height: 1.6; color: #202020; background: #fdfdfc; }
+    .note-input:focus { outline: 2px solid #9f9f9d; outline-offset: 1px; }
+    .note-tip { font-size: 11px; color: #888; margin: 7px 0 12px; }
+    .note-save-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .note-save-row .subtle { font-size: 11px; }
+    .note-list-header { display: flex; align-items: center; justify-content: space-between; margin: 26px 0 10px; padding-top: 18px; border-top: 1px solid #ededec; }
+    .note-list-header h3 { font-size: 14px; }
+    .note-list { display: grid; gap: 10px; }
+    .note-entry { border: 1px solid #e9e9e6; border-radius: 12px; padding: 14px 15px; background: #fafaf9; }
+    .note-entry-head { display: flex; align-items: center; justify-content: space-between; gap: 9px; margin-bottom: 8px; }
+    .note-entry-type { font-size: 11px; background: #ebebea; padding: 3px 7px; border-radius: 6px; color: #343434; }
+    .note-entry-time { color: #8b8b8b; font-size: 11px; }
+    .note-entry-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.65; }
+    .note-entry-actions { display: flex; gap: 12px; margin-top: 9px; }
+    .note-entry-actions button { border: 0; background: none; font-size: 12px; color: #555; padding: 2px 0; }
+    .note-entry-actions button:hover { color: #000; text-decoration: underline; }
+    .note-export { position: sticky; bottom: 0; padding: 14px 24px 19px; border-top: 1px solid #e9e9e7; background: #fff; display: grid; gap: 11px; }
+    .note-export .btn { flex: 1; }
+    .note-export-top, .note-export-bottom { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .note-export .subtle { font-size: 11px; margin: 0; }
+    .note-count { display: inline-block; color: #777; background: #f3f3f2; border-radius: 8px; font-size: 11px; padding: 2px 7px; font-weight: 600; }
+    @media (max-width: 680px) {
+      .note-drawer { inset: auto 0 0; margin: auto 0 0; width: 100%; max-width: 100%; height: min(91dvh, 820px); max-height: 91dvh; border-radius: 19px 19px 0 0; border-bottom: 0; }
+      .note-head { padding: 16px 18px 14px; }
+      .note-body { padding: 17px 18px; }
+      .note-export { padding: 12px 18px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -362,7 +401,7 @@
 
   <div class="shell">
     <div class="topbar">
-      <div><div class="topbar-title" id="topTitle">我的学习工作台</div><div class="topbar-subtitle">AI Frontier Radar · V1</div></div>
+      <div><div class="topbar-title" id="topTitle">我的学习工作台</div><div class="topbar-subtitle">AI Frontier Radar · V1.2</div></div>
       <div class="topbar-right"><span class="sync-chip"><span class="live-dot"></span>公开资源自动同步</span><span class="top-date" id="topDate"></span></div>
     </div>
     <main class="content">
@@ -421,7 +460,7 @@
             <div class="feed-list" id="homeNews"><div class="feed-row subtle">正在读取新闻…</div></div>
           </div>
         </div>
-        <div class="knowledge-strip"><div><h3>把“看过”变成“会用”</h3><p>在教程卡片中一键复制 Markdown 笔记模板，粘贴到 Obsidian，补充自己的练习记录。</p></div><button class="btn primary" id="stripCopy"><svg class="icon"><use href="#i-copy"/></svg> 复制笔记模板</button></div>
+        <div class="knowledge-strip"><div><h3>把“看过”变成“会用”</h3><p>学习时点击「学习随记」，随时记录想法、疑问和实操；导出 Obsidian 笔记时自动整合。</p></div><button class="btn primary" id="stripCopy"><svg class="icon"><use href="#i-copy"/></svg> 复制 Obsidian 笔记</button></div>
       </section>
 
       <section data-page="discover" hidden>
@@ -442,7 +481,7 @@
       </section>
 
       <section data-page="progress" hidden>
-        <div class="page-heading panel-heading"><div><div class="kicker">LEARNING PROGRESS</div><h1>学习进度</h1><p class="lead">每条教程都可以记录 0–100% 的学习进展。进度由你决定，不自动猜测观看时长。</p></div><span class="tag muted" id="progressCountLabel">0 项学习计划</span></div>
+        <div class="page-heading panel-heading"><div><div class="kicker">LEARNING PROGRESS</div><h1>学习进度</h1><p class="lead">每条教程可记录 0–100% 的进度，还能写学习随记。所有进度和笔记暂时保存在当前浏览器。</p></div><span class="tag muted" id="progressCountLabel">0 项学习计划</span></div>
         <section class="progress-dashboard" aria-labelledby="progressPageHeading">
           <div class="progress-head"><div><h2 id="progressPageHeading">学习计划完成度</h2><p>仅统计你标记为「学习中」或「已学完」的教程</p></div></div>
           <div class="progress-grid">
@@ -469,7 +508,7 @@
 
       <section data-page="saved" hidden>
         <div class="page-heading panel-heading"><div><div class="kicker">MY COLLECTION</div><h1>我的收藏</h1><p class="lead">保留想回看的好资料。下一步再把它们变成实际任务和个人知识卡片。</p></div></div>
-        <div class="privacy">收藏和学习状态暂时只存储在当前浏览器中，不会同步到 Mac、iPhone，也不会写入公开的 GitHub 仓库。</div>
+        <div class="privacy">收藏、学习状态与学习随记暂时只存储在当前浏览器。换设备时可先导出/导入随记备份；未来将使用个人登录实现私有同步，不会将私人笔记写入公开 JSON。</div>
         <div class="section-heading"><h2>收藏的教程</h2><button class="section-link" data-navigate="tutorials">浏览教程 →</button></div>
         <div class="cards" id="savedTutorialCards"></div>
         <div class="saved-section"><div class="section-heading"><h2>收藏的资讯</h2><button class="section-link" data-navigate="discover">浏览资讯 →</button></div><div class="cards" id="savedNewsCards"></div></div>
@@ -481,13 +520,36 @@
 
 <dialog id="detailDialog"><div class="dialog-body"><div class="dialog-heading"><div><h2 id="detailTitle">资讯详情</h2><p id="detailSource"></p></div><button class="dialog-close" id="detailClose" aria-label="关闭详情"><svg class="icon"><use href="#i-x"/></svg></button></div><div id="detailSections"></div><div id="detailActions" style="margin-top:18px"></div></div></dialog>
 <dialog id="collectDialog"><div class="dialog-body"><div class="dialog-heading"><div><h2>设置收藏快捷入口</h2><p>建议填写飞书「快速收藏表单」的直接链接。</p></div><button class="dialog-close" id="collectClose" aria-label="关闭设置"><svg class="icon"><use href="#i-x"/></svg></button></div><label for="collectUrl" class="form-label">飞书收藏表单链接</label><input id="collectUrl" class="form-input" type="url" inputmode="url" placeholder="https://...feishu.cn/..."><p class="form-help">仅保存在当前设备的浏览器中，不会上传到公开仓库。尚未设置时，「快速收藏」会打开飞书首页。</p><div class="form-actions"><button class="btn" id="clearCollect">清除</button><button class="btn primary" id="saveCollect">保存链接</button></div></div></dialog>
+<dialog id="noteDialog" class="note-drawer" aria-labelledby="noteDialogTitle">
+  <div class="note-head">
+    <div><div class="kicker">QUICK NOTES · PRIVATE</div><h2 id="noteDialogTitle">学习随记</h2><div class="subtle" id="noteSubtitle">每条教程独立保存</div></div>
+    <button class="dialog-close" id="noteClose" type="button" aria-label="关闭学习随记"><svg class="icon"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="note-body">
+    <div class="note-meta">
+      <div><label for="noteKind">记录类型</label><select id="noteKind"><option value="想法">灵感 / 想法</option><option value="问题">遇到的问题</option><option value="实操">实操记录</option></select></div>
+      <div><label for="noteTimestamp">视频时间点（可选）</label><input id="noteTimestamp" class="form-input" type="text" inputmode="text" maxlength="8" placeholder="例如 12:35"></div>
+    </div>
+    <label for="noteDraft">写下这一刻的想法</label>
+    <textarea id="noteDraft" class="note-input" maxlength="12000" placeholder="例如：Web Clipper 能否先提取 B站字幕，再整理成自己的 AI 知识卡片？"></textarea>
+    <div class="note-tip" id="noteDraftHint">草稿自动保存在当前浏览器；点击「保存随记」后成为一条独立记录。</div>
+    <div class="note-save-row"><span class="subtle" id="noteEditingLabel">当前：添加新随记</span><div style="display:flex;gap:8px"><button type="button" class="btn small" id="noteCancelEdit" hidden>取消编辑</button><button type="button" class="btn primary small" id="noteSave">保存随记</button></div></div>
+    <div class="note-list-header"><h3>已保存的学习随记</h3><span class="note-count" id="noteCount">0 条</span></div>
+    <div class="note-list" id="noteList"><p class="subtle">还没有随记，先写下一条想法吧。</p></div>
+  </div>
+  <div class="note-export">
+    <div class="note-export-top"><button type="button" class="btn primary" id="noteCopyMarkdown">复制 Obsidian 笔记</button><button type="button" class="btn" id="noteDownloadMarkdown">下载 .md</button></div>
+    <div class="note-export-bottom"><button type="button" class="btn small" id="noteExportBackup">导出随记备份 JSON</button><button type="button" class="btn small" id="noteImportBackup">导入备份</button><input id="noteImportFile" type="file" accept="application/json,.json" hidden></div>
+    <p class="subtle">笔记仍只保存在本机浏览器。可以通过备份文件转移随记，未来接入个人账号后实现私有跨设备同步。</p>
+  </div>
+</dialog>
 <div id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
 (() => {
   'use strict';
   const FEISHU_HOME = 'https://my.feishu.cn/';
-  const KEYS = { newsSaved: 'radarSaved', tutorialSaved: 'radarTutorialSaved', learning: 'radarLearningV1', progress: 'radarTutorialProgressV1', collect: 'radarCollectURL' };
+  const KEYS = { newsSaved: 'radarSaved', tutorialSaved: 'radarTutorialSaved', learning: 'radarLearningV1', progress: 'radarTutorialProgressV1', collect: 'radarCollectURL', notes: 'radarNotesV1', noteDrafts: 'radarNoteDraftsV1' };
   const NEWS_CATEGORIES = { apps: '前沿应用', agent: 'Agent', model: '模型动态', github: 'GitHub' };
   const PLATFORMS = { bilibili: 'B站', youtube: 'YouTube', xiaohongshu: '小红书' };
   const DIFFICULTIES = { beginner: '零基础', intermediate: '初级实操', advanced: '进阶项目', unknown: '未分类' };
@@ -508,6 +570,146 @@
   if (!Array.isArray(savedTutorials)) savedTutorials = [];
   if (!learning || typeof learning !== 'object' || Array.isArray(learning)) learning = {};
   if (!progress || typeof progress !== 'object' || Array.isArray(progress)) progress = {};
+  // Versioned, per-tutorial note records: future cloud sync can reuse IDs and updatedAt.
+  let noteStore = readStored(KEYS.notes, {version:1, notesByTutorial:{}});
+  if (!noteStore || noteStore.version!==1 || typeof noteStore.notesByTutorial!=='object' || !noteStore.notesByTutorial || Array.isArray(noteStore.notesByTutorial)) noteStore={version:1,notesByTutorial:{}};
+  let noteDrafts = readStored(KEYS.noteDrafts, {});
+  if (!noteDrafts || typeof noteDrafts !== 'object' || Array.isArray(noteDrafts)) noteDrafts={};
+  let activeNoteTutorial = null;
+  let noteEditingId = null;
+  function persistNoteStore() {
+    try { localStorage.setItem(KEYS.notes, JSON.stringify(noteStore)); return true; }
+    catch (e) { console.warn('保存笔记失败',e); toast('笔记未能写入浏览器，请及时导出备份'); return false; }
+  }
+  function getNotes(id) {
+    const rows = noteStore.notesByTutorial[String(id)];
+    return Array.isArray(rows) ? rows.filter(n => !n.deletedAt) : [];
+  }
+  function noteCount(id) { return getNotes(id).length; }
+  function noteId() { return (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'note-' + Date.now() + '-' + Math.random().toString(36).slice(2); }
+  function storeDraft() {
+    if(!activeNoteTutorial) return;
+    const id=String(activeNoteTutorial.id);
+    noteDrafts[id]={kind:$('noteKind').value,time:$('noteTimestamp').value,body:$('noteDraft').value,editingId:noteEditingId};
+    writeStored(KEYS.noteDrafts,noteDrafts);
+  }
+  function clearNoteForm() {
+    const id=activeNoteTutorial && String(activeNoteTutorial.id);
+    noteEditingId=null;
+    $('noteKind').value='想法'; $('noteTimestamp').value=''; $('noteDraft').value='';
+    $('noteEditingLabel').textContent='当前：添加新随记'; $('noteSave').textContent='保存随记'; $('noteCancelEdit').hidden=true;
+    if (id) { delete noteDrafts[id]; writeStored(KEYS.noteDrafts,noteDrafts); }
+  }
+  function openNotes(item) {
+    if (!item) return toast('请先选择一条教程');
+    activeNoteTutorial=item;
+    $('noteDialogTitle').textContent=item.title || '学习随记';
+    $('noteSubtitle').textContent=(PLATFORMS[item.platform]||'精选教程')+' · 自动保存草稿 · 本地私有';
+    const draft=noteDrafts[String(item.id)];
+    noteEditingId=typeof draft?.editingId==='string' ? draft.editingId : null;
+    $('noteKind').value=['想法','问题','实操'].includes(draft?.kind) ? draft.kind : '想法';
+    $('noteTimestamp').value=typeof draft?.time==='string' ? draft.time : '';
+    $('noteDraft').value=typeof draft?.body==='string' ? draft.body : '';
+    $('noteEditingLabel').textContent=noteEditingId?'当前：编辑已有随记':'当前：添加新随记';
+    $('noteSave').textContent=noteEditingId?'保存修改':'保存随记'; $('noteCancelEdit').hidden=!noteEditingId;
+    renderNoteList(); $('noteDialog').showModal();
+  }
+  function noteTimeIsValid(time) { return !time || /^(?:\d{1,3}:[0-5]\d|\d{1,2}:[0-5]\d:[0-5]\d)$/.test(time); }
+  function saveNote() {
+    if (!activeNoteTutorial) return;
+    const body=$('noteDraft').value.trim();
+    const time=$('noteTimestamp').value.trim();
+    if (!body) return toast('先写下一点想法再保存');
+    if (!noteTimeIsValid(time)) return toast('视频时间点请填写 12:35 或 01:12:35');
+    const id=String(activeNoteTutorial.id), rows=[...getNotes(id)], now=new Date().toISOString();
+    if (noteEditingId) {
+      const index=rows.findIndex(n=>n.id===noteEditingId);
+      if (index>=0) rows[index]={...rows[index],kind:$('noteKind').value,time,body,updatedAt:now};
+      else rows.push({id:noteId(),kind:$('noteKind').value,time,body,createdAt:now,updatedAt:now});
+    } else rows.push({id:noteId(),kind:$('noteKind').value,time,body,createdAt:now,updatedAt:now});
+    noteStore.notesByTutorial[id]=rows;
+    if (!persistNoteStore()) return;
+    clearNoteForm(); renderNoteList(); renderCurrent(); toast('随记已保存到当前浏览器');
+  }
+  function editNote(note) {
+    noteEditingId=note.id;
+    $('noteKind').value=note.kind;
+    $('noteTimestamp').value=note.time||'';
+    $('noteDraft').value=note.body;
+    $('noteEditingLabel').textContent='当前：编辑已有随记'; $('noteSave').textContent='保存修改'; $('noteCancelEdit').hidden=false;
+    storeDraft(); $('noteDraft').focus();
+  }
+  function deleteNote(note) {
+    if (!activeNoteTutorial || !window.confirm('确定删除这条随记？删除后无法撤销。')) return;
+    const id=String(activeNoteTutorial.id);
+    const updatedAt=new Date().toISOString();
+    noteStore.notesByTutorial[id]=(noteStore.notesByTutorial[id]||[]).map(n=>n.id===note.id ? {...n,deletedAt:updatedAt,updatedAt} : n);
+    if (!persistNoteStore()) return;
+    if(noteEditingId===note.id) clearNoteForm();
+    renderNoteList(); renderCurrent(); toast('已删除随记');
+  }
+  function renderNoteList() {
+    if(!activeNoteTutorial) return;
+    const notes=getNotes(activeNoteTutorial.id);
+    $('noteCount').textContent=notes.length+' 条';
+    const list=$('noteList'); list.replaceChildren();
+    if(!notes.length){ list.appendChild(el('p','subtle','还没有随记。记录一个问题，或写下刚刚想到的实操方法。')); return; }
+    [...notes].reverse().forEach(note=>{
+      const card=el('article','note-entry');
+      const head=el('div','note-entry-head');
+      const type=el('span','note-entry-type',note.kind+(note.time?' · '+note.time:''));
+      const when=el('span','note-entry-time',note.updatedAt ? new Date(note.updatedAt).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '');
+      head.append(type,when);
+      const text=el('div','note-entry-text',note.body);
+      const actions=el('div','note-entry-actions');
+      actions.appendChild(btn('编辑',()=>editNote(note),''));
+      actions.appendChild(btn('删除',()=>deleteNote(note),''));
+      card.append(head,text,actions); list.appendChild(card);
+    });
+  }
+  function noteMarkdown(item) {
+    const notes=item ? getNotes(item.id) : [];
+    if(!notes.length) return '- 还没有添加随记';
+    return notes.map((n,i)=>{
+      const label=(n.kind||'想法')+(n.time?' · 视频 '+n.time:'');
+      return `${i+1}. **${label}**（${(n.createdAt||'').slice(0,10)||'待补充'}）\n\n   ${String(n.body||'').replace(/\n/g,'\n   ')}`;
+    }).join('\n\n');
+  }
+  function triggerDownload(content,filename,mime) {
+    const blob=new Blob([content],{type:mime}); const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  function safeFilename(name) { return String(name||'AI学习随记').replace(/[\\/:*?"<>|\x00-\x1f]/g,'_').slice(0,60).trim() || 'AI学习随记'; }
+  function exportNotesBackup() {
+    const snapshot={format:'ai-frontier-radar-notes',version:1,exportedAt:new Date().toISOString(),notesByTutorial:noteStore.notesByTutorial};
+    triggerDownload(JSON.stringify(snapshot,null,2),'AI-Radar-Notes-Backup-'+new Date().toISOString().slice(0,10)+'.json','application/json');
+    toast('备份已导出；请妥善保管私人学习随记');
+  }
+  async function importNotesBackup(file) {
+    if(!file) return;
+    if(file.size>3*1024*1024) return toast('备份文件过大，限 3 MB');
+    try {
+      const data=JSON.parse(await file.text());
+      if(data.format!=='ai-frontier-radar-notes'||data.version!==1||!data.notesByTutorial||typeof data.notesByTutorial!=='object'||Array.isArray(data.notesByTutorial))throw Error('备份格式不正确');
+      let added=0,changed=0;
+      const merged=JSON.parse(JSON.stringify(noteStore.notesByTutorial));
+      for (const [tid,items] of Object.entries(data.notesByTutorial)) {
+        if(!Array.isArray(items)||tid.length>256)continue;
+        const existing=Array.isArray(merged[tid]) ? [...merged[tid]] : [];
+        for(const n of items) {
+          if(!n||typeof n.id!=='string'||!n.id||n.id.length>128||!['想法','问题','实操'].includes(n.kind)||typeof n.body!=='string'||n.body.length>12000||typeof n.time!=='string'||n.time.length>8)continue;
+          const index=existing.findIndex(x=>x.id===n.id);
+          const safe={id:n.id,kind:n.kind,body:n.body,time:n.time,createdAt:typeof n.createdAt==='string'?n.createdAt:'',updatedAt:typeof n.updatedAt==='string'?n.updatedAt:'',...(typeof n.deletedAt==='string' && n.deletedAt ? {deletedAt:n.deletedAt}: {})};
+          if(index<0){existing.push(safe);added++;}
+          else if(safe.updatedAt>String(existing[index].updatedAt||'')){existing[index]=safe;changed++;}
+        }
+        merged[tid]=existing;
+      }
+      noteStore.notesByTutorial=merged;
+      if(!persistNoteStore())return;
+      renderNoteList(); renderCurrent(); toast(`备份已合并：新增 ${added} 条，更新 ${changed} 条`);
+    } catch(e) { console.warn('导入笔记失败',e); toast('导入失败，请选择本工作台导出的有效 JSON 备份'); }
+  }
   function safeUrl(input) { try { const u = new URL(input); return u.protocol === 'https:' ? u.href : null; } catch { return null; } }
   function toast(message) { const t = $('toast'); t.textContent = message; t.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => t.hidden = true, 3000); }
   const normalize = value => String(value || '').toLowerCase();
@@ -583,7 +785,8 @@
       addProgressControls(row, t);
       const actions = el('div', 'progress-item-actions');
       actions.appendChild(btn('打开教程 ↗', () => openExternal(t.url), 'btn small'));
-      actions.appendChild(btn('笔记模板', () => copyNote(t), 'btn small'));
+      actions.appendChild(btn('学习随记'+(noteCount(t.id)?' · '+noteCount(t.id):''), () => openNotes(t), 'btn small'));
+      actions.appendChild(btn('导出笔记', () => copyNote(t), 'btn small'));
       if (learning[t.id] === 'learning') actions.appendChild(btn('标记完成', () => updateLearning(t.id,'done'), 'btn small'));
       else actions.appendChild(btn('重新学习', () => updateLearning(t.id,'learning'), 'btn small'));
       actions.appendChild(btn('移出计划', () => updateLearning(t.id,null), 'btn ghost small'));
@@ -591,7 +794,26 @@
     });
   }
   function getFocus() { const active = state.tutorials.find(t => learning[t.id]==='learning'); return active || state.tutorials.find(t => /obsidian/i.test([t.title,t.topic].join(' '))) || state.tutorials.find(t=>t.difficulty==='beginner') || state.tutorials[0] || null; }
-  function copyNote(item) { const title=item?.title || '我的 AI 学习笔记'; const url=safeUrl(item?.url || '') || '待补充'; const text=[`# ${title}`, '', `- 来源：${url}`, `- 主题：${item?.topic || '待补充'}`, `- 学习状态：${item && learning[item.id] === 'done' ? '已完成' : item && learning[item.id] === 'learning' ? '学习中' : '待开始'}`, `- 当前进度：${item ? getProgress(item.id) : 0}%`, '', '## 一句话总结', '> 用自己的话写下这项工具或方法解决什么问题。', '', '## 核心知识点', '- ', '', '## 我的实操记录', '- 我做了什么：', '- 运行结果：', '- 遇到的问题：', '', '## 我的理解与思考', '- ', '', '## 后续行动', '- [ ] ', '', '## 推荐理由（原资料）', item?.learning_value || '待补充', '', '## 相关知识', '[[AI学习]]', ''].join('\n'); copyText(text, 'Markdown 学习笔记已复制，打开 Obsidian 粘贴即可'); }
+  function buildMarkdown(item) {
+    const title=item?.title || '我的 AI 学习笔记';
+    const url=safeUrl(item?.url || '') || '待补充';
+    return [
+      `# ${title}`, '',
+      `- 教程来源：${url}`, `- 作者：${item?.creator || '待补充'}`,
+      `- 主题：${item?.topic || '待补充'}`,
+      `- 学习状态：${item && learning[item.id] === 'done' ? '已完成' : item && learning[item.id] === 'learning' ? '学习中' : '待开始'}`,
+      `- 当前进度：${item ? getProgress(item.id) : 0}%`, '',
+      '## 教程内容简介', item?.summary || '待补充', '',
+      '## 我的学习随记', noteMarkdown(item), '',
+      '## 一句话总结', '> 用自己的话解释这条教程解决了什么问题。', '',
+      '## 我的理解与思考', '- ', '',
+      '## 实操成果', '- 我做了什么：', '- 运行结果：', '- 遇到的问题：', '',
+      '## 后续行动', '- [ ] ', '',
+      '## 推荐理由（原资料）', item?.learning_value || '待补充', '',
+      '## 相关知识', '[[AI学习]]', ''
+    ].join('\n');
+  }
+  function copyNote(item) { copyText(buildMarkdown(item), '已复制含学习随记的 Obsidian Markdown 笔记'); }
   async function copyText(text, message) { try { if (!navigator.clipboard || !navigator.clipboard.writeText) throw Error('Clipboard API unavailable'); await navigator.clipboard.writeText(text); toast(message); } catch { const area=el('textarea'); area.value=text; area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.select(); const ok=document.execCommand('copy'); area.remove(); toast(ok?message:'复制失败，请使用 HTTPS 网站或手动复制'); } }
   function renderHome() {
     $('statNews').textContent=state.newsReady ? state.news.length : '—';
@@ -609,6 +831,7 @@
       const actions=el('div','focus-actions'); actions.appendChild(btn('查看原教程 ↗',()=>openExternal(focus.url),'btn primary small'));
       if (learning[focus.id]!=='learning') actions.appendChild(btn('标记学习中',()=>updateLearning(focus.id,'learning'),'btn small'));
       else actions.appendChild(btn('标记已学完',()=>updateLearning(focus.id,'done'),'btn small'));
+      actions.appendChild(btn('学习随记'+(noteCount(focus.id)?' · '+noteCount(focus.id):''),()=>openNotes(focus),'btn small'));
       actions.appendChild(btn('复制笔记模板',()=>copyNote(focus),'btn small'));
       box.append(tag,name,summary,meta);
       if (learning[focus.id] === 'learning' || learning[focus.id] === 'done') addProgressControls(box, focus, true);
@@ -625,9 +848,10 @@
   function renderTutorialCards(containerId, items) { const grid=$(containerId); grid.replaceChildren(); if (!items.length) { const msg=el('div','empty'); msg.append(el('h3','','暂时没有符合条件的教程'),el('p','','试试其他关键词或在飞书审核新的学习资料。')); grid.appendChild(msg); return; }
     items.forEach(t => { const card=el('article','resource-card'); const badge=el('div',''); badge.style.display='flex'; badge.style.flexWrap='wrap'; badge.style.gap='7px'; badge.appendChild(el('span','tag',(PLATFORMS[t.platform]||t.platform||'教程')+' · '+(DIFFICULTIES[t.difficulty]||'未分类'))); if(learning[t.id])badge.appendChild(el('span',learning[t.id]==='learning'?'tag amber':'tag muted',learning[t.id]==='learning'?'学习中':'已学完')); card.appendChild(badge); card.appendChild(el('h3','',t.title)); card.appendChild(el('p','',t.summary || '请打开原教程了解详情。')); card.appendChild(el('div','meta','主题：'+(t.topic||'未分类')+' · 作者：'+(t.creator||'待补充'))); if(t.learning_value){ const reason=el('p','reason'); const bold=el('b','', '推荐理由：'); reason.append(bold,document.createTextNode(t.learning_value)); card.appendChild(reason); }
       if (learning[t.id] === 'learning' || learning[t.id] === 'done') addProgressControls(card, t, true);
+      if (noteCount(t.id)) card.appendChild(el('span','note-count',noteCount(t.id)+' 条学习随记'));
       const actions=el('div','card-actions'); actions.appendChild(link('查看原教程 ↗',t.verified===true ? t.url : null,'text-link')); actions.appendChild(el('span','grow'));
       actions.appendChild(btn(learning[t.id]==='learning'?'标记学完':learning[t.id]==='done'?'重新学习':'开始学习',()=>updateLearning(t.id,learning[t.id]==='learning'?'done':'learning'),'btn small'));
-      const bookmark=btn(savedTutorials.includes(t.id)?'已收藏':'收藏',()=>toggleBookmark(t.id,'tutorial'),'btn small'); actions.appendChild(bookmark); actions.appendChild(btn('笔记',()=>copyNote(t),'btn small')); card.appendChild(actions); grid.appendChild(card);
+      const bookmark=btn(savedTutorials.includes(t.id)?'已收藏':'收藏',()=>toggleBookmark(t.id,'tutorial'),'btn small'); actions.appendChild(bookmark); actions.appendChild(btn('随记'+(noteCount(t.id)?' · '+noteCount(t.id):''),()=>openNotes(t),'btn small')); actions.appendChild(btn('复制笔记',()=>copyNote(t),'btn small')); card.appendChild(actions); grid.appendChild(card);
     });
   }
   function renderDiscover() { const search=normalize($('newsSearch').value.trim()); const category=state.newsCategory; const items=state.news.filter(n=> (category==='all'||n.category===category) && normalize([n.title,n.summary,n.source,n.insight].join(' ')).includes(search)); $('newsCountLabel').textContent=(state.newsReady?items.length:'—')+' 条资讯'; renderNews('newsCards',items); }
@@ -647,8 +871,17 @@
   $('heroStart').addEventListener('click',()=>{const focus=getFocus(); if(focus&&learning[focus.id]==='learning')openExternal(focus.url); else navigate('tutorials');});
   $('openCollect').addEventListener('click',openCollect); $('configureCollect').addEventListener('click',showCollectSettings); $('collectClose').addEventListener('click',()=>$('collectDialog').close()); $('saveCollect').addEventListener('click',saveCollectSettings); $('clearCollect').addEventListener('click',()=>{$('collectUrl').value='';writeText(KEYS.collect,'');$('collectDialog').close();toast('收藏快捷链接已清除');});
   $('copyFocusNote').addEventListener('click',()=>copyNote(getFocus())); $('stripCopy').addEventListener('click',()=>copyNote(getFocus()));
+  $('noteClose').addEventListener('click', () => $('noteDialog').close());
+  $('noteSave').addEventListener('click', saveNote);
+  $('noteCancelEdit').addEventListener('click', () => { clearNoteForm(); $('noteDraft').focus(); });
+  for(const id of ['noteKind','noteTimestamp','noteDraft']) $(id).addEventListener('input', storeDraft);
+  $('noteCopyMarkdown').addEventListener('click', () => copyNote(activeNoteTutorial));
+  $('noteDownloadMarkdown').addEventListener('click', () => { const t=activeNoteTutorial; if(!t)return; triggerDownload(buildMarkdown(t), safeFilename(t.title)+'.md','text/markdown;charset=utf-8'); toast('Markdown 笔记已下载'); });
+  $('noteExportBackup').addEventListener('click',exportNotesBackup);
+  $('noteImportBackup').addEventListener('click',()=>$('noteImportFile').click());
+  $('noteImportFile').addEventListener('change',async e=>{await importNotesBackup(e.target.files?.[0]);e.target.value='';});
   $('detailClose').addEventListener('click',()=>$('detailDialog').close());
-  for (const id of ['detailDialog','collectDialog']) $(id).addEventListener('click',e=>{if(e.target===$(id))$(id).close();});
+  for (const id of ['detailDialog','collectDialog','noteDialog']) $(id).addEventListener('click',e=>{if(e.target===$(id))$(id).close();});
   $('topDate').textContent=dateBeijing(new Date(),false);
   window.addEventListener('hashchange',()=>navigate(location.hash.slice(1)));
   navigate(location.hash.slice(1)||'home');
