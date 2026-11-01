@@ -1,7 +1,39 @@
 {
-  "generated_at": "2026-10-31T16:16:01.267795+00:00",
-  "count": 10,
+  "generated_at": "2026-11-01T01:40:59.275964+00:00",
+  "count": 12,
   "items": [
+    {
+      "id": "89b00e074d740bc8",
+      "category": "github",
+      "title": "hproxy-com/free-proxy-list",
+      "summary": "Free proxy list, verified around the clock: HTTP, HTTPS, SOCKS4 and SOCKS5 proxies with country, anonymity, latency and uptime on every row, updated several times a day. Live list, proxy checker, keyless API and MCP server at hproxy.com.",
+      "source": "GitHub",
+      "date": "2026-11-01T01:40:53+00:00",
+      "url": "https://github.com/hproxy-com/free-proxy-list",
+      "change": "",
+      "innovation": "",
+      "practice": "",
+      "insight": "",
+      "stars": 86,
+      "created_at": "2026-06-16T18:04:40+00:00",
+      "date_type": "代码最近推送时间"
+    },
+    {
+      "id": "a559d5e3c21a4569",
+      "category": "github",
+      "title": "mindroom-ai/mindroom",
+      "summary": "AI agents that know you and your work, in a chat app anyone can use. Open source, any model, self-host or hosted.",
+      "source": "GitHub",
+      "date": "2026-11-01T01:40:50+00:00",
+      "url": "https://github.com/mindroom-ai/mindroom",
+      "change": "",
+      "innovation": "",
+      "practice": "",
+      "insight": "",
+      "stars": 354,
+      "created_at": "2026-01-19T23:06:18+00:00",
+      "date_type": "代码最近推送时间"
+    },
     {
       "id": "a8a62cfae489a798",
       "category": "github",
