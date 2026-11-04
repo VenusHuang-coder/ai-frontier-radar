@@ -77,6 +77,21 @@
       "verified": true
     },
     {
+      "id": "feishu-reczz28TT5CfMKFv",
+      "platform": "bilibili",
+      "title": "最强AI工作流工具n8n终极入门教学-从业余小白到职业高手",
+      "creator": "木子",
+      "url": "https://b23.tv/8HXBmfN",
+      "difficulty": "beginner",
+      "topic": "Workflow",
+      "language": "zh",
+      "summary": "该视频教程旨在帮助初学者掌握AI工作流工具n8n，从基础概念、部署方式到实际应用，逐步引导观众完成AI自动化系统的构建。内容涵盖n8n的功能介绍、三种部署方式、界面和触发节点认识、工作流构建、API和HTTP请求节点使用、数据结构、数据处理节点以及实战案例等。",
+      "recommended_sections": "",
+      "learning_value": "学习后可以掌握n8n的基本操作和实际应用，适合想要入门AI工作流工具的初学者。",
+      "verified": true,
+      "source": "feishu"
+    },
+    {
       "id": "feishu-reczz28TTGzdgUa5",
       "platform": "bilibili",
       "title": "AI知识库怎么用？Obsidian整理得越好,越不想打开?",
@@ -118,6 +133,21 @@
       "summary": "本视频介绍了如何使用Obsidian和AI Agent搭建一个能持续积累、关联和调用知识的“AI第二大脑”。以WorkBuddy为例，完整演示了资料收集、知识提炼、关联建库、问答调用和知识库体检等流程，并通过定时任务实现自动收集、摄入与检查。",
       "recommended_sections": "",
       "learning_value": "学习后可以掌握如何利用Obsidian和AI Agent构建个人知识库，提升学习和工作效率。",
+      "verified": true,
+      "source": "feishu"
+    },
+    {
+      "id": "feishu-reczz28UsNKcwaGz",
+      "platform": "xiaohongshu",
+      "title": "这是一个教你写提示词的免费工具",
+      "creator": "小红书博主",
+      "url": "https://xhslink.cn/o/4sKIMWpGOoH",
+      "difficulty": "beginner",
+      "topic": "Prompt",
+      "language": "zh",
+      "summary": "教学prompt",
+      "recommended_sections": "",
+      "learning_value": "待评估提示词优化工具",
       "verified": true,
       "source": "feishu"
     }
