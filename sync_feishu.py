@@ -90,6 +90,55 @@ def to_text(value):
     return str(value)
 
 
+# 缓存已解析的网址，避免重复请求
+_SHORT_URL_CACHE = {}
+
+def expand_short_url(url):
+    if url in _SHORT_URL_CACHE:
+        return _SHORT_URL_CACHE[url]
+
+    host = (urlsplit(url).hostname or "").lower()
+
+    # 目前先处理 B站分享短链接
+    if host not in ("b23.tv", "www.b23.tv"):
+        return url
+
+    result = url
+
+    try:
+        with requests.get(
+            url,
+            allow_redirects=True,
+            stream=True,
+            timeout=12,
+            headers={"User-Agent": "Mozilla/5.0"},
+        ) as response:
+            actual_url = response.url
+
+        actual_host = (
+            urlsplit(actual_url).hostname or ""
+        ).lower()
+
+        if (
+            actual_host == "bilibili.com"
+            or actual_host.endswith(".bilibili.com")
+        ):
+            result = actual_url
+        else:
+            print(
+                "短链接未能解析为B站长链接，请人工核对：",
+                url
+            )
+
+    except requests.RequestException:
+        print(
+            "短链接解析失败，请在飞书填写完整视频链接：",
+            url
+        )
+
+    _SHORT_URL_CACHE[url] = result
+    return result
+
 
 def find_url(fields):
     """
@@ -112,7 +161,9 @@ def find_url(fields):
         )
 
         if match:
-            return match.group(0).rstrip(".,;，。；")
+            return expand_short_url(
+                match.group(0).rstrip(".,;，。；")
+            )
 
     return ""
 
@@ -144,7 +195,7 @@ def get_platform(url):
 
 
 def url_key(url):
-    parsed = urlsplit(url)
+    parsed = urlsplit(expand_short_url(url))
     host = (parsed.hostname or "").lower()
     path = parsed.path.rstrip("/")
 
