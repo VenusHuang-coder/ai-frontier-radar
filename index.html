@@ -921,7 +921,56 @@
   function showCollectSettings() { $('collectUrl').value=readText(KEYS.collect); $('collectDialog').showModal(); }
   function saveCollectSettings() { const val=$('collectUrl').value.trim(); if (val&&!safeUrl(val)) return toast('请输入以 https:// 开头的有效链接'); writeText(KEYS.collect,val); $('collectDialog').close(); toast('收藏链接已保存在此浏览器'); }
   async function loadNews() { try { const resp=await fetch('./news.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('资讯数据格式错误'); state.news=data.items; state.newsReady=true; state.updatedAt=data.generated_at || null; hydrateSavedNewsArchive(); } catch(e) { state.newsError=true; console.error('加载新闻失败',e); } renderCurrent(); }
-  async function loadTutorials() { try { const resp=await fetch('./tutorials.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('教程数据格式错误'); state.tutorials=data.items; state.tutorialReady=true; } catch(e) { state.tutorialError=true; console.error('加载教程失败',e); } renderCurrent(); }
+  
+  function tutorialKey(item) {
+    try {
+      const url = new URL(item.url);
+      const host = url.hostname.toLowerCase();
+  
+      const bv = url.pathname.match(/\/video\/(BV[a-z0-9]+)/i);
+      if (
+        (host === "bilibili.com" ||
+         host.endsWith(".bilibili.com")) &&
+        bv
+      ) {
+        return "bilibili:" + bv[1].toLowerCase();
+      }
+  
+      if (host === "youtu.be") {
+        return "youtube:" + url.pathname.slice(1);
+      }
+  
+      if (
+        host === "youtube.com" ||
+        host.endsWith(".youtube.com")
+      ) {
+        const videoId =
+          url.searchParams.get("v") ||
+          url.pathname.match(/^\/(?:shorts|live)\/([^/]+)/)?.[1];
+  
+        if (videoId) return "youtube:" + videoId;
+      }
+  
+      return host + url.pathname.replace(/\/+$/, "");
+    } catch {
+      return item.url || item.id;
+    }
+  }
+  async function loadTutorials() { try { const resp=await fetch('./tutorials.json',{cache:'no-store'}); if(!resp.ok)throw Error('HTTP '+resp.status); const data=await resp.json(); if(!Array.isArray(data.items))throw Error('教程数据格式错误'); 
+const seen = new Set();
+
+state.tutorials = data.items.filter(item => {
+    const key = tutorialKey(item);
+
+    if (seen.has(key)) {
+        console.log("跳过重复教程：", item.title);
+        return false;
+    }
+
+    seen.add(key);
+    return true;
+});
+ state.tutorialReady=true; } catch(e) { state.tutorialError=true; console.error('加载教程失败',e); } renderCurrent(); }
   document.querySelectorAll('[data-page-link]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.pageLink)));
   document.querySelectorAll('[data-navigate]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.navigate)));
   document.querySelectorAll('[data-news-category]').forEach(b=>b.addEventListener('click',()=>{state.newsCategory=b.dataset.newsCategory;document.querySelectorAll('[data-news-category]').forEach(x=>x.classList.toggle('active',x===b));renderDiscover();}));
