@@ -1,7 +1,39 @@
 {
-  "generated_at": "2026-11-21T01:46:22.540215+00:00",
+  "generated_at": "2026-11-22T01:45:27.648764+00:00",
   "count": 36,
   "items": [
+    {
+      "id": "15050b602ba6fbb2",
+      "category": "github",
+      "title": "ParadevAI/Paradev",
+      "summary": "Paradev is an open-source Codex App and Conductor alternative. Orchestrate an army coding agents in parallel with your own subscriptions.",
+      "source": "GitHub",
+      "date": "2026-11-22T01:45:12+00:00",
+      "url": "https://github.com/ParadevAI/Paradev",
+      "change": "",
+      "innovation": "",
+      "practice": "",
+      "insight": "",
+      "stars": 16456,
+      "created_at": "2025-10-21T09:16:51+00:00",
+      "date_type": "代码最近推送时间"
+    },
+    {
+      "id": "89b00e074d740bc8",
+      "category": "github",
+      "title": "hproxy-com/free-proxy-list",
+      "summary": "Free proxy list, verified around the clock: HTTP, HTTPS, SOCKS4 and SOCKS5 proxies with country, anonymity, latency and uptime on every row, updated several times a day. Live list, proxy checker, keyless API and MCP server at hproxy.com.",
+      "source": "GitHub",
+      "date": "2026-11-22T01:45:08+00:00",
+      "url": "https://github.com/hproxy-com/free-proxy-list",
+      "change": "",
+      "innovation": "",
+      "practice": "",
+      "insight": "",
+      "stars": 97,
+      "created_at": "2026-06-16T18:04:40+00:00",
+      "date_type": "代码最近推送时间"
+    },
     {
       "id": "f03b6c686a597d54",
       "category": "github",
@@ -16,22 +48,6 @@
       "insight": "",
       "stars": 5020,
       "created_at": "2026-07-16T21:21:54+00:00",
-      "date_type": "代码最近推送时间"
-    },
-    {
-      "id": "89b00e074d740bc8",
-      "category": "github",
-      "title": "hproxy-com/free-proxy-list",
-      "summary": "Free proxy list, verified around the clock: HTTP, HTTPS, SOCKS4 and SOCKS5 proxies with country, anonymity, latency and uptime on every row, updated several times a day. Live list, proxy checker, keyless API and MCP server at hproxy.com.",
-      "source": "GitHub",
-      "date": "2026-11-21T01:46:12+00:00",
-      "url": "https://github.com/hproxy-com/free-proxy-list",
-      "change": "",
-      "innovation": "",
-      "practice": "",
-      "insight": "",
-      "stars": 97,
-      "created_at": "2026-06-16T18:04:40+00:00",
       "date_type": "代码最近推送时间"
     },
     {
@@ -480,22 +496,6 @@
       "innovation": "",
       "practice": "",
       "insight": ""
-    },
-    {
-      "id": "6e18aa23e1f0d144",
-      "category": "github",
-      "title": "heygen-com/hyperframes",
-      "summary": "Write HTML. Render video. Built for agents.",
-      "source": "GitHub",
-      "date": "2026-11-15T01:44:00+00:00",
-      "url": "https://github.com/heygen-com/hyperframes",
-      "change": "",
-      "innovation": "",
-      "practice": "",
-      "insight": "",
-      "stars": 84360,
-      "created_at": "2026-03-10T01:51:06+00:00",
-      "date_type": "代码最近推送时间"
     }
   ]
 }
