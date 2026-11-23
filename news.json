@@ -1,7 +1,39 @@
 {
-  "generated_at": "2026-11-22T01:45:27.648764+00:00",
-  "count": 36,
+  "generated_at": "2026-11-23T01:52:55.694789+00:00",
+  "count": 35,
   "items": [
+    {
+      "id": "6e18aa23e1f0d144",
+      "category": "github",
+      "title": "heygen-com/hyperframes",
+      "summary": "Open-source AI video editor: edit your own footage, or create and remake any video with Claude Code, Codex or the free Studio app. Write HTML, render MP4. By HeyGen.",
+      "source": "GitHub",
+      "date": "2026-11-23T01:52:53+00:00",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "change": "",
+      "innovation": "",
+      "practice": "",
+      "insight": "",
+      "stars": 88305,
+      "created_at": "2026-03-10T01:51:06+00:00",
+      "date_type": "代码最近推送时间"
+    },
+    {
+      "id": "0a8884baa5f55aa6",
+      "category": "github",
+      "title": "stablyai/orca",
+      "summary": "Orca lets you run a fleet of bots with your own subscription (e.g. Claude Code, Grok, Agy, Codex). Available on desktop, mobile and remote runtime.",
+      "source": "GitHub",
+      "date": "2026-11-23T01:52:47+00:00",
+      "url": "https://github.com/stablyai/orca",
+      "change": "",
+      "innovation": "",
+      "practice": "",
+      "insight": "",
+      "stars": 133077,
+      "created_at": "2026-03-17T03:28:57+00:00",
+      "date_type": "代码最近推送时间"
+    },
     {
       "id": "15050b602ba6fbb2",
       "category": "github",
@@ -35,6 +67,19 @@
       "date_type": "代码最近推送时间"
     },
     {
+      "id": "1a10f1676d46fc01",
+      "category": "model",
+      "title": "Perplexity and Intelligence",
+      "summary": "How perplexity measures progress in AI models, and why it could help developers establish a shared approach to evaluating emerging capabilities.",
+      "source": "OpenAI",
+      "date": "2026-11-22T00:00:00+00:00",
+      "url": "https://openai.com/index/perplexity-and-intelligence",
+      "change": "",
+      "innovation": "",
+      "practice": "",
+      "insight": ""
+    },
+    {
       "id": "f03b6c686a597d54",
       "category": "github",
       "title": "kirodotdev/KiroCrew",
@@ -62,22 +107,6 @@
       "innovation": "",
       "practice": "",
       "insight": ""
-    },
-    {
-      "id": "0a8884baa5f55aa6",
-      "category": "github",
-      "title": "stablyai/orca",
-      "summary": "Orca lets you run a fleet of coding agents (e.g. Claude Code, Codex) with your own subscription. Available on desktop, mobile and remote runtime.",
-      "source": "GitHub",
-      "date": "2026-11-20T01:46:27+00:00",
-      "url": "https://github.com/stablyai/orca",
-      "change": "",
-      "innovation": "",
-      "practice": "",
-      "insight": "",
-      "stars": 129945,
-      "created_at": "2026-03-17T03:28:57+00:00",
-      "date_type": "代码最近推送时间"
     },
     {
       "id": "660f6ab9f29e1252",
@@ -457,45 +486,6 @@
       "stars": 8650,
       "created_at": "2026-08-13T06:28:56+00:00",
       "date_type": "代码最近推送时间"
-    },
-    {
-      "id": "60f3c7381bc61eae",
-      "category": "apps",
-      "title": "The King’s Trust and OpenAI launch £1m partnership",
-      "summary": "The King’s Trust and OpenAI launch a £1m partnership to help up to 25,000 young people across the UK build practical AI skills for work.",
-      "source": "OpenAI",
-      "date": "2026-11-16T00:00:00+00:00",
-      "url": "https://openai.com/index/the-kings-trust-and-openai",
-      "change": "",
-      "innovation": "",
-      "practice": "",
-      "insight": ""
-    },
-    {
-      "id": "2e8f421d2ee2a3df",
-      "category": "model",
-      "title": "A step toward defining the Standard Model on a lattice",
-      "summary": "Explore a candidate nonperturbative lattice definition of the Standard Model and how GPT-6 Astra helped turn the idea into a detailed proof.",
-      "source": "OpenAI",
-      "date": "2026-11-15T22:00:01+00:00",
-      "url": "https://openai.com/index/step-toward-defining-the-standard-model",
-      "change": "",
-      "innovation": "",
-      "practice": "",
-      "insight": ""
-    },
-    {
-      "id": "33b95c2112c46efd",
-      "category": "apps",
-      "title": "Our new blog for science",
-      "summary": "The OpenAI science blog shares new findings, practical methods, and firsthand accounts from researchers using AI to advance scientific discovery.",
-      "source": "OpenAI",
-      "date": "2026-11-15T22:00:00+00:00",
-      "url": "https://openai.com/index/our-new-blog-for-science",
-      "change": "",
-      "innovation": "",
-      "practice": "",
-      "insight": ""
     }
   ]
 }
